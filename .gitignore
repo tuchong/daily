@@ -1,0 +1,14 @@
+.DS_*
+node_modules
+*.sublime*
+*.log
+www/lib/
+platforms/ios/*
+releases
+hooks
+plugins
+sketch
+ionic.*
+resources
+www/css/*.css
+www/configs.*
