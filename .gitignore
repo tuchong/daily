@@ -12,3 +12,4 @@ ionic.*
 resources
 www/css/*.css
 www/configs.*
+config.xml
