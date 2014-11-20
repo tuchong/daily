@@ -10,6 +10,7 @@
   angular
     .module('tuchong-daily', [
       'ionic',
+      'avoscloud',
       'ngResource',
       'ngCordova'
     ])
@@ -20,7 +21,8 @@
     .config([
       '$httpProvider',
       '$stateProvider', 
-      '$urlRouterProvider', 
+      '$urlRouterProvider',
+      'avoscloudProvider', 
       'API_TOKEN',
       'API_TOKEN_KEY',
       config
@@ -28,37 +30,86 @@
     .run([
       '$ionicPlatform',
       '$cordovaDevice', 
-      '$cordovaPush', 
+      '$cordovaPush',
+      '$timeout',
+      'avoscloud',
+      '$cordovaDialogs',
       init
     ]);
 
-  function init($ionicPlatform, $cordovaDevice, $cordovaPush) {
+  function init($ionicPlatform, $cordovaDevice, $cordovaPush, $timeout, avoscloud, $cordovaDialogs) {
     $ionicPlatform.ready(function() {
       var device = $cordovaDevice.getDevice();
-      var uuid = $cordovaDevice.getUUID();
+      if (log) log(device);
 
-      // $cordovaPush.register({
-      //   "badge":"true",
-      //   "sound":"true",
-      //   "alert":"true"
-      // }).then(function(result) {
-      //   alert(result);
-      //   alert(JSON.stringify(result));
-      //   alert('push service signup success!!');
-      // }, function(err){
-      //   alert('push service signup error ' + err);
-      // });
-      // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-      // for form inputs)
-      if (window.cordova && window.cordova.plugins.Keyboard)
-        cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+      authPushService(device, function(installation){
+        if (log) log(installation);
+
+        avoscloud
+          .installations
+          .post(installation, syncInstallationSuccess, syncError);
+
+        // When sync device infomation success
+        function syncInstallationSuccess(result) {
+          if (log) log(result);
+        }
+
+        // Ignore the error for tmp.
+        function syncError(err) {
+          if (log) log(err);
+        }
+      });
+
       // org.apache.cordova.statusbar required
       if (window.StatusBar)
         StatusBar.styleDefault();
     });
+
+    function authPushService(device, callback) {
+      var options = {
+        "badge":"true",
+        "sound":"true",
+        "alert":"true"
+      };
+
+      $cordovaPush
+        .register(options)
+        .then(function(token) {
+        if (log)
+          log('Push service signup success, token: %s', token);
+
+        var installation = {};
+
+        installation.deviceType = device.platform ? 
+          device.platform.toLowerCase() : 
+          'ios';
+
+        if (installation.deviceType === 'ios')
+          installation.deviceToken = token;
+
+        if (installation.deviceType === 'android')
+          installation.installationId = token;
+
+        return callback(installation);
+      }, pushSignupError);
+
+      // Ignore the error for tmp.
+      function pushSignupError(err) {
+        if (log) log(err);
+
+        $cordovaDialogs.alert(
+          '(¬_¬)ﾉ 请手动在 设置 > 通知 启用推送', // message
+          '获取推送权限失败...', // title,
+          '知道了' // button
+        )
+      }
+    }
   }
 
-  function config($httpProvider, $stateProvider, $urlRouterProvider, API_TOKEN, API_TOKEN_KEY) {
+  function config($httpProvider, $stateProvider, $urlRouterProvider, avoscloudProvider, API_TOKEN, API_TOKEN_KEY) {
+    // Configs push service
+    avoscloudProvider.config(appConfigs.avoscloud);
+
     // Use X-Domain to request cross domain
     $httpProvider.defaults.useXDomain = true;
     delete $httpProvider.defaults.headers.common['X-Requested-With'];
