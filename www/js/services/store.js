@@ -21,7 +21,8 @@
     var self = this;
     self.tuchong = {};
     var apiMap = {
-      'hot': '/daily'
+      'hot': '/daily',
+      'post': '/post'
     };
     var tuchongApiMap = {
       'post': 'post/get-post-and-images'

@@ -38,8 +38,20 @@
       imageLoader.cache.collection[$stateParams.id] :
       [];
 
-    if (!collection)
-      return $state.go('home');
+    if (!collection) {
+      Store.post.get({
+        postId: $stateParams.id
+      }, function(result){
+        if (log) log(result);
+        
+        collection = result;
+        setup(result);
+      }, function(err) {
+        if (log) log(err);
+        $state.go('home');
+      });
+      return;
+    }
 
     setup(collection);
 
