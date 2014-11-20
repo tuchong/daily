@@ -31,7 +31,10 @@ $ debug.enable('tuchong-daily,tuchong-daily:*')
 
 ```bash
 $ cordova plugin add org.apache.cordova.device
+$ cordova plugin add org.apache.cordova.dialogs
+$ cordova plugin add org.apache.cordova.statusbar
 $ cordova plugin add https://github.com/phonegap-build/PushPlugin.git
+$ cordova plugin add https://github.com/xu-li/cordova-plugin-wechat
 ```
 
 添加发布平台
