@@ -75,8 +75,7 @@
       $cordovaPush
         .register(options)
         .then(function(token) {
-        if (log)
-          log('Push service signup success, token: %s', token);
+        if (log) log('Push service signup success, token: %s', token);
 
         var installation = {};
 
