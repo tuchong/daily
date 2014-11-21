@@ -1,4 +1,4 @@
-;(function(angular, debug) {
+;(function(angular, debug, localStorage) {
   'use strict';
   var log;
 
@@ -15,38 +15,35 @@
       'Store',
       'UI',
       '$ionicSlideBoxDelegate',
-      '$ionicActionSheet',
-      '$ionicNavBarDelegate',
       '$timeout',
       '$rootScope',
       'imageLoader',
       '$cordovaDialogs',
+      'share',
       home
     ]);
 
-  function home(scope, $state, Store, UI, $ionicSlideBoxDelegate, $ionicActionSheet, $ionicNavBarDelegate, $timeout, $rootScope, imageLoader, $cordovaDialogs) {
+  function home(scope, $state, Store, UI, $ionicSlideBoxDelegate, $timeout, $rootScope, imageLoader, $cordovaDialogs, share) {
     scope.go = go;
-    scope.share = share;
+    scope.share = share.popup;
     scope.refresh = refresh;
     scope.updateSlides = updateSlides;
     scope.backgrounds = imageLoader.cache && imageLoader.cache.home ? 
       imageLoader.cache.home :
       [];
 
-    if (log)
-      log(scope.backgrounds);
-
-    $rootScope.$on('$stateChangeStart', stateChangeStart);
-    $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
-
     // When Push Received,
     // Jump to single collection page
     scope.$on('pushNotificationReceived', pushNotificationReceived);
 
+    // Listen to page changing event,
+    // And jump to lastSlideIndex
+    $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
+
     // Show loading message
     UI.loading.show('<i class="icon ion-refreshing"></i> 努力加载中...');
 
-    // Read local cache from localStroage
+    // Read local cache from localStorage
     if (Store.cache.collections) 
       return setup(Store.cache.collections);
 
@@ -76,9 +73,7 @@
       function success(data){
         if (!data.collections)
           return UI.loading.show('<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试');  
-        
-        if (log)
-          log(data.collections);
+        if (log) log(data.collections);
 
         setup(data.collections);
         Store.save('collections', data.collections);
@@ -88,8 +83,7 @@
       }
 
       function fail(err){
-        UI
-          .loading
+        UI.loading
           .show('<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试');
 
         if (callback) 
@@ -100,25 +94,26 @@
     // Init a slides with 3 slides,
     // If collection's pictures is above 3.
     function setup(collections) {
-      if (collections.length > 3)
-        scope.collections = [collections[0], collections[1], collections[2]];
-      else
-        scope.collections = scope.collections;
+      // if (collections.length > 3)
+      //   scope.collections = [collections[0], collections[1], collections[2]];
+      // else
+      scope.collections = collections;
 
       imageLoader.load(1, scope, 'home');
+      
       $ionicSlideBoxDelegate.update();
     }
 
     // Update slides async
     function updateSlides(index) {
-      if (log)
-        log('Switching to slide index: [%s]', index);
+      if (log) log('Switching to slide index: [%s]', index);
+      if (!index) return;
 
       imageLoader.load(index + 1, scope, 'home');
-      scope.lastSlideIndex = index;
+      localStorage.lastSlideIndexHome = index;
 
-      if (!scope.collections[index + 2] && Store.cache.collections[index + 2])
-        scope.collections.push(Store.cache.collections[index + 2]);
+      // if (!scope.collections[index + 2] && Store.cache.collections[index + 2])
+      //   scope.collections.push(Store.cache.collections[index + 2]);
         
       $ionicSlideBoxDelegate.update();
     }
@@ -143,35 +138,26 @@
       });
     }
 
-    // Show the sharing ActionSheet
-    function share() {
-       var hideSheet = $ionicActionSheet.show({
-         buttons: [{ 
-          text: '<i class="icon ion-forward"></i> 分享到微信' 
-         },
-         { 
-          text: '<i class="icon ion-email"></i> 邮件发送' 
-         }],
-         titleText: '与朋友们分享好图...',
-         cancelText: '算了',
-         cancel: function() {
-          
-         },
-         buttonClicked: function(index) {
-           return true;
-         }
-       });
-    }
-
-    function stateChangeStart(event, toState, toParams, fromState, fromParams) {
-      if (toState.name === 'collection') {
-        UI.loading.show('<i class="icon ion-loading-c"></i> 正加载专辑...');
-      }
-    }
-
+    // When stats changes success, Go to the latest slide index
     function stateChangeSuccess(event, toState, toParams, fromState, fromParams) {
-      // UI.loading.hide();
+      if (log) log('%s => %s', fromState.name, toState.name);
+
+      var isGoHome = toState.name === 'home';
+      var isGoToCollection = fromState.name === 'collection-single' && toState.name === 'collection';
+
+      if (!isGoHome && !isGoToCollection)
+        return;
+
+      var gotoIndex = isGoHome ? 
+        localStorage.lastSlideIndexHome : 
+        localStorage.lastSlideIndexCollection;
+
+      $timeout(function(){
+        $ionicSlideBoxDelegate.slide(
+          parseInt(gotoIndex)
+        );  
+      }, 200);
     }
   }
 
-})(window.angular, window.debug);
+})(window.angular, window.debug, window.localStorage);

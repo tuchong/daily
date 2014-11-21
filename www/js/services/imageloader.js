@@ -37,11 +37,13 @@
       loadImage(image, loadDone, loadError);
 
       function loadDone() {
-        if (log)
-          log('Image loaded: %s:', image);
+        if (log) log('Image loaded: %s', image);
 
         scope.backgrounds[index] = image;
         scope.$apply();
+
+        if (!scope.slidesReady)
+          scope.slidesReady = true;
 
         // Update the whole cache
         if (type === 'home')
@@ -53,10 +55,8 @@
       }
 
       function loadError() {
-        if (log)
-          log('Image load error!');
-
-        UI.loading.show('图片加载失败，请稍后再试试...');
+        UI.loading
+          .show('图片加载失败，请稍后再试试...');
       }
     }
 
