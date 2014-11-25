@@ -22,7 +22,7 @@
       collection
     ])
     .controller('collection-single', [
-      '$scope', 
+      '$scope',
       '$stateParams',
       '$state',
       single
@@ -33,18 +33,15 @@
     scope.share = share.popup;
     scope.viewLarge = viewLarge;
     scope.updateSlides = updateSlides;
+    scope.backgrounds = imageLoader.loadCache($stateParams.id);
 
     var collection = Store.findById($stateParams.id);
-
-    scope.backgrounds = imageLoader.cache && imageLoader.cache.collection && imageLoader.cache.collection[$stateParams.id] ? 
-      imageLoader.cache.collection[$stateParams.id] :
-      [];
 
     if (!collection) {
       Store.post.get({
         postId: $stateParams.id
       }, function(result){
-        if (log) log(result);        
+        if (log) log(result);
         collection = result;
         setup(result);
       }, function(err) {
@@ -60,9 +57,9 @@
       scope.collection = collection;
       scope.post = collection.post;
 
-      // if (collection.images && collection.images.length > 3) 
+      // if (collection.images && collection.images.length > 3)
       //   scope.images = [collection.images[0], collection.images[1], collection.images[2]];
-      // else 
+      // else
       scope.images = collection.images;
 
       imageLoader.load(1, scope, 'collection', $stateParams.id);
@@ -80,16 +77,17 @@
 
       $ionicSlideBoxDelegate.update();
     }
-    
+
     function toggle(side) {
-      var method = side === 'right' ? 'toggleRight': 'toggleLeft';
+      var method = side === 'right' ? 
+        'toggleRight': 'toggleLeft';
       $ionicSideMenuDelegate[method]();
     }
 
     function viewLarge() {
-      var index = localStorage.lastSlideIndexCollection ? 
-      parseInt(localStorage.lastSlideIndexCollection) : 0;
-      // Find the image uri and go to single page      
+      var index = localStorage.lastSlideIndexCollection ?
+        parseInt(localStorage.lastSlideIndexCollection) : 0;
+      // Find the image uri and go to single page
       $state.go('collection-single', {
         uri: scope.images[index].uri
       });

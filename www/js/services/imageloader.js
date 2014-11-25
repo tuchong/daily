@@ -4,7 +4,7 @@
 
   if (!angular)
     throw new Error('Angular.js is required');
-  if (debug) 
+  if (debug)
     log = debug('tuchong-daily:ImageLoader');
 
   angular
@@ -17,27 +17,33 @@
   function imageLoader(UI) {
     var self = this;
     this.load = loadBackground;
+    this.loadCache = loadCache;
     this.cache = {};
-    this.cache.collection = {};
+
+    function loadCache(type) {
+      if (!self.cache[type])
+        return [];
+      return self.cache[type];
+    }
 
     function loadBackground(index, scope, type, id) {
       if (!index) return;
-
       index = index - 1;
 
-      if (scope.backgrounds[index])
-        return UI.loading.hide();
+      if (log && scope.backgrounds[index]) 
+        log('Cached founded!');
 
-      UI.loading.show('<i class="icon ion-loading-c"></i> 图片加载中...');
+      UI.loading
+        .show('<i class="icon ion-loading-c"></i> 图片加载中...');
 
-      var image = type === 'home' ? 
+      var image = type === 'home' ?
         scope.collections[index].images[0].uri :
         scope.images[index].uri ;
 
       loadImage(image, loadDone, loadError);
 
       function loadDone() {
-        if (log) log('Image loaded: %s', image);
+        if (log) log('Image loaded: %s', image + '.jpg');
 
         scope.backgrounds[index] = image;
         scope.$apply();
@@ -46,10 +52,8 @@
           scope.slidesReady = true;
 
         // Update the whole cache
-        if (type === 'home')
-          self.cache[type] = scope.backgrounds;
-        if (type === 'collection')
-          self.cache.collection[id] = scope.backgrounds;
+        var cacheKey = type === 'home' ? type : id;
+        self.cache[cacheKey] = scope.backgrounds;
 
         UI.loading.hide();
       }
