@@ -43,8 +43,6 @@
     fetchFresh();
 
     function pushNotificationReceived(event, notification) {
-      if (log) log(notification);
-
       if (notification.collectionId) {
         $state.go('collection', {
           id: notification.collectionId
@@ -67,7 +65,8 @@
         if (!data.collections)
           return UI.loading.show('<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试');
 
-        if (log) log(data.collections);
+        if (log)
+          log('Reading fresh collections (%s)', data.collections.length);
 
         // Setup a few slides
         setup(data.collections, true);
@@ -109,7 +108,7 @@
     // Update slides async
     function updateSlides(index) {
       if (isNaN(index)) index = 0;
-      
+
       if (log) log('Switching to slide: [%s]', index);
 
       // Loading this slide's backgroud-image
