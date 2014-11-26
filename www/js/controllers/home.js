@@ -108,6 +108,8 @@
 
     // Update slides async
     function updateSlides(index) {
+      if (isNaN(index)) index = 0;
+      
       if (log) log('Switching to slide: [%s]', index);
 
       // Loading this slide's backgroud-image
