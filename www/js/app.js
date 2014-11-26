@@ -40,6 +40,10 @@
     ]);
 
   function init($ionicPlatform, $cordovaDevice, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $ionicSlideBoxDelegate, $rootScope) {
+    // Clear reading history
+    if (localStorage.lastSlideIndexHome) 
+      localStorage.removeItem('lastSlideIndexHome');
+
     // Listen to page changing event,
     // And jump to lastSlideIndex
     $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
@@ -114,14 +118,14 @@
     function stateChangeSuccess(e, toState, toParams, fromState, fromParams) {
       if (log) log('%s => %s', fromState.name || 'init', toState.name);
 
-      var isGoHome = toState.name === 'home';
+      var isGoBackHome = toState.name === 'home' && fromState.name;
       var isGoToCollection = fromState.name === 'home' && toState.name === 'collection';
       var isBackToCollection = fromState.name === 'collection-single' && toState.name === 'collection';
 
-      if (!isGoHome && !isGoToCollection && !isBackToCollection) return;
+      if (!isGoBackHome && !isGoToCollection && !isBackToCollection) return;
       if (isGoToCollection) return;
 
-      var gotoIndex = isGoHome ?
+      var gotoIndex = isGoBackHome ?
         localStorage.lastSlideIndexHome :
         localStorage.lastSlideIndexCollection;
 

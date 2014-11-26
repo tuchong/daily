@@ -39,9 +39,6 @@
       UI.loading
         .show('<i class="icon ion-loading-c"></i> 图片加载中...');
 
-      if (type === 'home' && !scope.collections)
-        return loadError();
-
       var image = type === 'home' ?
         scope.collections[index].images[0].uri :
         scope.images[index].uri ;
