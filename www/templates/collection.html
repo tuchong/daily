@@ -11,7 +11,7 @@
       <ion-side-menu-content drag-content="false">
 
         <ion-slide-box on-slide-changed="updateSlides($index)" show-pager="false">
-          <ion-slide ng-repeat="image in images" ng-style="{'background-image': backgrounds[$index] ? 'url(' + backgrounds[$index] + '.jpg)' : ''}" on-hold="share(collection)">
+          <ion-slide ng-repeat="image in images" ng-style="{'background-image': backgrounds[$index] ? 'url(' + backgrounds[$index] + '.jpg)' : ''}" on-hold="share(image, post)">
             <div class="post post-single" ng-show="image.exif">
               <div class="entry">
                 <p class="camera" ng-show="image.exif.camera && image.exif.camera.name">
