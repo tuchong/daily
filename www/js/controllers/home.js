@@ -89,9 +89,6 @@
     // Init a slides with 3 slides,
     // If collection's pictures is above 3.
     function setup(collections, fresh) {
-      if (fresh && localStorage.lastSlideIndexHome) 
-        localStorage.removeItem('lastSlideIndexHome');
-
       var lastIndex = localStorage.lastSlideIndexHome;
       var inValid = !lastIndex || parseInt(lastIndex) <= 3;
       // Lazy loading slides with a center point
