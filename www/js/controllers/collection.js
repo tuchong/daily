@@ -43,7 +43,7 @@
       }, function(result){
         if (log) log(result);
         collection = result;
-        setup(result);
+        setup(result, true);
       }, function(err) {
         if (log) log(err);
         $state.go('home');
@@ -53,27 +53,31 @@
 
     setup(collection);
 
-    function setup(collection) {
-      scope.collection = collection;
+    function setup(collection, fresh) {
+      var lastIndex = localStorage.lastSlideIndexCollection;
+      var inValid = !lastIndex || parseInt(lastIndex) <= 3;
+
       scope.post = collection.post;
+      scope.collection = collection;
 
-      // if (collection.images && collection.images.length > 3)
-      //   scope.images = [collection.images[0], collection.images[1], collection.images[2]];
-      // else
-      scope.images = collection.images;
+      // Lazy loading slides with a center point
+      scope.images = fresh ? 
+        angular.copy(collection.images).splice(0, 3) :
+        angular.copy(collection.images).splice(0, inValid ? 3 : parseInt(lastIndex) + 1);
 
-      imageLoader.load(1, scope, 'collection', $stateParams.id);
+      imageLoader.load(0, scope, 'collection', $stateParams.id);
+
       $ionicSlideBoxDelegate.update();
     }
 
     function updateSlides(index) {
-      if (log) log('Switching to slide index: [%s]', index);
+      if (log) log('Switching to slide: [%s]', index);
 
-      imageLoader.load(index + 1, scope, 'collection', $stateParams.id);
+      imageLoader.load(index, scope, 'collection', $stateParams.id);
       localStorage.lastSlideIndexCollection = index;
 
-      // if (!scope.images[index + 2] && collection.images[index + 2])
-      //   scope.images.push(collection.images[index + 2]);
+      if (!scope.images[index + 1] && collection.images[index + 1])
+        scope.images.push(collection.images[index + 1]);
 
       $ionicSlideBoxDelegate.update();
     }

@@ -27,8 +27,7 @@
     }
 
     function loadBackground(index, scope, type, id) {
-      if (!index) return;
-      index = index - 1;
+      if (index === undefined || index === null) return;
 
       if (log && scope.backgrounds[index]) 
         log('Cached founded!');
