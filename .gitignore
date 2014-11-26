@@ -13,3 +13,4 @@ resources
 www/css/*.css
 www/configs.*
 config.xml
+src/**/*.back.*

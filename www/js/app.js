@@ -34,10 +34,16 @@
       '$timeout',
       'avoscloud',
       '$cordovaDialogs',
+      '$ionicSlideBoxDelegate',
+      '$rootScope',
       init
     ]);
 
-  function init($ionicPlatform, $cordovaDevice, $cordovaPush, $timeout, avoscloud, $cordovaDialogs) {
+  function init($ionicPlatform, $cordovaDevice, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $ionicSlideBoxDelegate, $rootScope) {
+    // Listen to page changing event,
+    // And jump to lastSlideIndex
+    $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
+
     $ionicPlatform.ready(function() {
       var device = $cordovaDevice.getDevice();
       if (log) log(device);
@@ -102,6 +108,34 @@
           '知道了' // button
         )
       }
+    }
+
+    // When stats changes success, Go to the latest slide index
+    function stateChangeSuccess(e, toState, toParams, fromState, fromParams) {
+      if (log) log('%s => %s', fromState.name || 'init', toState.name);
+
+      var isGoHome = toState.name === 'home';
+      var isGoToCollection = fromState.name === 'home' && toState.name === 'collection';
+      var isBackToCollection = fromState.name === 'collection-single' && toState.name === 'collection';
+
+      if (!isGoHome && !isGoToCollection && !isBackToCollection) return;
+      if (isGoToCollection) return;
+
+      var gotoIndex = isGoHome ?
+        localStorage.lastSlideIndexHome :
+        localStorage.lastSlideIndexCollection;
+
+      if (!gotoIndex)
+        gotoIndex = 0;
+
+      gotoIndex = parseInt(gotoIndex);
+
+      if (log) log('Going back to %s', gotoIndex);
+
+      // Slide to last visited index.
+      $timeout(function(){
+        $ionicSlideBoxDelegate.slide(gotoIndex);
+      }, 200);
     }
   }
 

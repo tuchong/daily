@@ -18,13 +18,12 @@
       '$timeout',
       '$rootScope',
       'imageLoader',
-      'slideLoader',
       '$cordovaDialogs',
       'share',
       home
     ]);
 
-  function home(scope, $state, Store, UI, $ionicSlideBoxDelegate, $timeout, $rootScope, imageLoader, slideLoader, $cordovaDialogs, share) {
+  function home(scope, $state, Store, UI, $ionicSlideBoxDelegate, $timeout, $rootScope, imageLoader, $cordovaDialogs, share) {
     scope.go = go;
     scope.share = share.popup;
     scope.updateSlides = updateSlides;
@@ -34,16 +33,12 @@
     // Jump to single collection page
     scope.$on('pushNotificationReceived', pushNotificationReceived);
 
-    // Listen to page changing event,
-    // And jump to lastSlideIndex
-    $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
-
     // Show loading message
     UI.loading.show('<i class="icon ion-refreshing"></i> 努力加载中...');
 
     // Read local cache from localStorage
     if (Store.cache.collections)
-      return setup('home', Store.cache.collections);
+      return setup(Store.cache.collections);
 
     fetchFresh();
 
@@ -75,7 +70,7 @@
         if (log) log(data.collections);
 
         // Setup a few slides
-        setup('home', data.collections, true);
+        setup(data.collections, true);
         // Save all data to cache
         Store.save('collections', data.collections);
 
@@ -94,22 +89,21 @@
 
     // Init a slides with 3 slides,
     // If collection's pictures is above 3.
-    function setup(type, collections, fresh) {
+    function setup(collections, fresh) {
+      if (fresh && localStorage.lastSlideIndexHome) 
+        localStorage.removeItem('lastSlideIndexHome');
+
+      var lastIndex = localStorage.lastSlideIndexHome;
+      var inValid = !lastIndex || parseInt(lastIndex) <= 3;
       // Lazy loading slides with a center point
-      scope.collections = slideLoader.lazyload(type, collections, fresh);
-      // Lazy loading the first slides' backgroud-image
-      imageLoader.load(1, scope, 'home');
+      scope.collections = fresh ? 
+        angular.copy(collections).splice(0, 3) :
+        angular.copy(collections).splice(0, inValid ? 3 : parseInt(lastIndex) + 1);
+
+      // Lazy loading the first slide's backgroud-image
+      imageLoader.load(0, scope, 'home');
       
       $ionicSlideBoxDelegate.update();
-    }
-
-    // It shoud lazyloading in range 2 on both left side and right side
-    function lazyLoadSlides(index) {
-      var localCache = Store.cache.collections[index + 2];
-      if (!scope.collections[index + 2] && localCache) {
-        if (log) log('Lazyloading slides: %s', index + 2);
-        scope.collections.push(localCache);
-      }
     }
 
     // Update slides async
@@ -117,13 +111,14 @@
       if (log) log('Switching to slide: [%s]', index);
 
       // Loading this slide's backgroud-image
-      imageLoader.load(index + 1, scope, 'home');
+      imageLoader.load(index, scope, 'home');
 
-      // Update latest relative index
-      slideLoader.update('home', index);
+      // Load the next slides
+      if (!scope.collections[index + 1] && Store.cache.collections[index + 1])
+        scope.collections.push(Store.cache.collections[index + 1]);
 
-      // Lazyloading the slides after next slides.
-      lazyLoadSlides(index);
+      // Update the latest index of home slides
+      localStorage.lastSlideIndexHome = index;
 
       $ionicSlideBoxDelegate.update();
     }
@@ -138,33 +133,7 @@
       UI.loading
         .show('<i class="icon ion-information-circled"></i> 这个相册只有一张图');
 
-      $timeout(function(){
-        UI.loading.hide();
-      }, 500);
-    }
-
-    // When stats changes success, Go to the latest slide index
-    function stateChangeSuccess(e, toState, toParams, fromState, fromParams) {
-      if (log) log('%s => %s', fromState.name, toState.name);
-
-      var isGoHome = toState.name === 'home';
-      var isGoToCollection = fromState.name === 'collection-single' && toState.name === 'collection';
-
-      if (!isGoHome && !isGoToCollection)
-        return;
-
-      var gotoIndex = isGoHome ?
-        localStorage.lastSlideIndexHome :
-        localStorage.lastSlideIndexCollection;
-
-      gotoIndex = parseInt(gotoIndex);
-
-      // Slide to last visited index.
-      $timeout(function(){
-        $ionicSlideBoxDelegate.slide(
-          gotoIndex === 0 ? 0 : 1
-        );
-      }, 200);
+      $timeout(UI.loading.hide, 400);
     }
   }
 
