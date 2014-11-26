@@ -18,7 +18,7 @@
   function ctrlerUI($ionicLoading, $ionicActionSheet) {
     this.popup = showPopup;
 
-    function showPopup(collection) {
+    function showPopup(image, post) {
       var sheet = {};
 
       sheet.buttons = [];
@@ -37,18 +37,17 @@
       $ionicActionSheet.show(sheet);
 
       function buttonClicked(index) {
-        if (log) log(collection);
         if (!window.Wechat) return;
 
-        var title = collection.post.title;
-        var thumbnail = collection.images ? collection.images[0] : null;
-        var description = collection.post.site && collection.post.site.description ? 
-          collection.post.site.description : '';
+        var title = post.title;
+        var thumbnail = image || null;
+        var description = post.site && post.site.description ? 
+          post.site.description : '';
 
         if (thumbnail && thumbnail.excerpt)
           title += (' - ' + thumbnail.excerpt);
-        if (collection.post && collection.post.author && collection.post.author.name)
-          title += (' @' + collection.post.author.name);
+        if (post && post.author && post.author.name)
+          title += (' @' + post.author.name);
 
         description += ' 图虫日报，精选每日图虫热门图片。'
 
@@ -59,7 +58,7 @@
            thumb: thumbnail ? thumbnail.uri_grid + '.jpg': 'http://ww2.sinaimg.cn/large/61ff0de3gw1emj19ju7p4j2030030745.jpg' ,
            media: {
              type: Wechat.Type.WEBPAGE,
-             webpageUrl: collection.post.url
+             webpageUrl: post.url
            }
          },
          scene: index

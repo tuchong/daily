@@ -1,7 +1,7 @@
 <ion-view title="<i class='icon tuchong-daily-logo'> 图虫日报">
   <ion-content scroll="false">
     <ion-slide-box on-slide-changed="updateSlides($index)" show-pager="false">
-      <ion-slide ng-repeat="collection in collections" ng-style="{'background-image': backgrounds[$index] ? 'url(' + backgrounds[$index] + '.jpg)' : '' }" on-tap="go(collection.postId, collection.images.length)" ng-show="slidesReady" on-hold="share(collection)">
+      <ion-slide ng-repeat="collection in collections" ng-style="{'background-image': backgrounds[$index] ? 'url(' + backgrounds[$index] + '.jpg)' : '' }" on-tap="go(collection.postId, collection.images.length)" ng-show="slidesReady" on-hold="share(collection.images[0], collection.post)">
         <div class="post" ng-show="collection.post && collection.post.title">
           <div class="entry">
             <p class="title" ng-bind="collection.post.title"></p>

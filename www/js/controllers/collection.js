@@ -58,8 +58,7 @@
       var inValid = !lastIndex || parseInt(lastIndex) <= 3;
 
       scope.post = collection.post;
-      scope.collection = collection;
-
+      
       // Lazy loading slides with a center point
       scope.images = fresh ? 
         angular.copy(collection.images).splice(0, 3) :
