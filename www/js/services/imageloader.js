@@ -29,8 +29,12 @@
     function loadBackground(index, scope, type, id) {
       if (index === undefined || index === null) return;
 
-      if (log && scope.backgrounds[index]) 
-        log('Cached founded!');
+      if (log && scope.backgrounds[index]) {
+        if (log) log('Reading image from cache');
+        if (!scope.slidesReady) 
+          scope.slidesReady = true;
+        return UI.loading.hide();
+      }
 
       UI.loading
         .show('<i class="icon ion-loading-c"></i> 图片加载中...');
