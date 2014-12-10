@@ -75,6 +75,8 @@
       imageLoader.load(index, scope, 'collection', $stateParams.id);
       localStorage.lastSlideIndexCollection = index;
 
+      if (log) log('Set lastSlideIndexCollection to %s', index);
+
       if (!scope.images[index + 1] && collection.images[index + 1])
         scope.images.push(collection.images[index + 1]);
 
