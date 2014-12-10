@@ -27,7 +27,7 @@
     }
 
     function loadBackground(index, scope, type, id) {
-      if (index === undefined || index === null) return;
+      if (index === undefined || index === null || isNaN(index)) return;
 
       if (log && scope.backgrounds[index]) {
         if (log) log('Reading image from cache');

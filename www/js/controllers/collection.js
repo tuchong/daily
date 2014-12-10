@@ -19,6 +19,7 @@
       'imageLoader',
       '$ionicSideMenuDelegate',
       'share',
+      '$timeout',
       collection
     ])
     .controller('collection-single', [
@@ -28,7 +29,7 @@
       single
     ])
 
-  function collection(scope, Store, UI, $ionicSlideBoxDelegate, $stateParams, $state, imageLoader, $ionicSideMenuDelegate, share) {
+  function collection(scope, Store, UI, $ionicSlideBoxDelegate, $stateParams, $state, imageLoader, $ionicSideMenuDelegate, share, $timeout) {
     scope.toggle = toggle;
     scope.share = share.popup;
     scope.viewLarge = viewLarge;
@@ -93,8 +94,13 @@
       var index = localStorage.lastSlideIndexCollection ?
         parseInt(localStorage.lastSlideIndexCollection) : 0;
 
-      if (!scope.images || !scope.images[index])
-        return UI.loading.show('<i class="icon ion-information-circled"></i> 啊喔，找不到大图了')
+      if (!scope.images || !scope.images[index]) {
+        UI.loading
+          .show('<i class="icon ion-information-circled"></i> 啊喔，找不到大图了')
+
+        $timeout(UI.loading.hide, 500);
+        return;
+      }
 
       // Find the image uri and go to single page
       $state.go('collection-single', {
