@@ -2,12 +2,12 @@
   <ion-content scroll="false">
     <ion-slide-box on-slide-changed="updateSlides($index)" show-pager="false">
       <ion-slide ng-repeat="collection in collections" ng-style="{'background-image': backgrounds[$index] ? 'url(' + backgrounds[$index] + '.jpg)' : '' }" on-tap="go(collection.postId, collection.images.length)" ng-show="slidesReady" on-hold="share(collection.images[0], collection.post)">
-        <div class="post" ng-show="collection.post && collection.post.title">
+        <div class="post" ng-show="collection.post">
           <div class="entry">
-            <p class="title" ng-bind="collection.post.title"></p>
+            <p class="title" ng-bind="collection.post.title" ng-show="collection.post.title"></p>
             <p class="author clearfix">
               <img ng-src="{{collection.post.author.icon}}" class="author-avatar" alt="">
-              <span ng-bind="collection.post.author.name"></span>
+              <span ng-bind="collection.post.author.name" ng-class="{valign: !!!collection.images[0].exif.camera}"></span>
               <span class="camera" ng-show="collection.images[0].exif.camera">
                 <i class="icon ion-camera"></i>
                 <i ng-bind="collection.images[0].exif.camera.name" ></i>
