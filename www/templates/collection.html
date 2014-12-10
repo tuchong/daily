@@ -42,7 +42,7 @@
           </div>
           <p class="author-desc" ng-bind="post.site.description" ng-show="post.site.description"></p>
           <p class="post-title" ng-bind="post.title" ng-show="post.title"></p>
-          <p class="post-content" ng-bind-html="post.parsedContent" ng-show="post.parsedContent"></p>
+          <p class="post-content" ng-bind="post.excerpt" ng-show="post.excerpt"></p>
         </div>
         <div id="footer-options" class="bar bar-footer">
           <button class="button button-block button-dark view-large" on-tap="viewLarge()">
