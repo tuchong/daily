@@ -118,6 +118,8 @@
       // Update the latest index of home slides
       localStorage.lastSlideIndexHome = index;
 
+      if (log) log('Set lastSlideIndexHome to %s', index);
+
       $ionicSlideBoxDelegate.update();
     }
 

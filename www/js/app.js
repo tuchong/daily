@@ -139,7 +139,7 @@
       // Slide to last visited index.
       $timeout(function(){
         $ionicSlideBoxDelegate.slide(gotoIndex);
-      }, 200);
+      }, 300);
     }
   }
 
