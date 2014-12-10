@@ -92,6 +92,10 @@
     function viewLarge() {
       var index = localStorage.lastSlideIndexCollection ?
         parseInt(localStorage.lastSlideIndexCollection) : 0;
+
+      if (!scope.images || !scope.images[index])
+        return UI.loading.show('<i class="icon ion-information-circled"></i> 啊喔，找不到大图了')
+
       // Find the image uri and go to single page
       $state.go('collection-single', {
         uri: scope.images[index].uri
