@@ -20,21 +20,27 @@
       '$ionicSideMenuDelegate',
       'share',
       '$timeout',
+      '$cordovaDialogs',
       collection
     ])
     .controller('collection-single', [
       '$scope',
       '$stateParams',
       '$state',
+      '$cordovaDialogs',
       single
     ])
 
-  function collection(scope, Store, UI, $ionicSlideBoxDelegate, $stateParams, $state, imageLoader, $ionicSideMenuDelegate, share, $timeout) {
+  function collection(scope, Store, UI, $ionicSlideBoxDelegate, $stateParams, $state, imageLoader, $ionicSideMenuDelegate, share, $timeout, $cordovaDialogs) {
     scope.toggle = toggle;
     scope.share = share.popup;
     scope.viewLarge = viewLarge;
     scope.updateSlides = updateSlides;
     scope.backgrounds = imageLoader.loadCache($stateParams.id);
+
+    // When Push Received,
+    // Jump to single collection page
+    scope.$on('pushNotificationReceived', pushNotificationReceived);
 
     var collection = Store.findById($stateParams.id);
 
@@ -53,6 +59,21 @@
     }
 
     setup(collection);
+
+    function pushNotificationReceived(event, notification) {
+      if (notification.collectionId) {
+        $state.go('collection', {
+          id: notification.collectionId
+        });
+        return;
+      }
+
+      $cordovaDialogs.alert(
+        notification.alert, // message
+        '收到通知', // title,
+        '知道了' // button
+      )
+    }
 
     function setup(collection, fresh) {
       var lastIndex = localStorage.lastSlideIndexCollection;
@@ -109,11 +130,30 @@
     }
   }
 
-  function single(scope, $stateParams, $state) {
+  function single(scope, $stateParams, $state, $cordovaDialogs) {
     if (!$stateParams.uri)
       return $state.go('home');
 
     scope.uri = $stateParams.uri;
+    
+    // When Push Received,
+    // Jump to single collection page
+    scope.$on('pushNotificationReceived', pushNotificationReceived);
+
+    function pushNotificationReceived(event, notification) {
+      if (notification.collectionId) {
+        $state.go('collection', {
+          id: notification.collectionId
+        });
+        return;
+      }
+
+      $cordovaDialogs.alert(
+        notification.alert, // message
+        '收到通知', // title,
+        '知道了' // button
+      )
+    }
   }
 
 })(window.angular, window.debug, window.localStorage);
