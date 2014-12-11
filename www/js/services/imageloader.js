@@ -11,10 +11,11 @@
     .module('tuchong-daily')
     .service('imageLoader', [
       'UI',
+      '$timeout',
       imageLoader
     ]);
 
-  function imageLoader(UI) {
+  function imageLoader(UI, $timeout) {
     var self = this;
     this.load = loadBackground;
     this.loadCache = loadCache;
@@ -34,6 +35,11 @@
         if (!scope.slidesReady) 
           scope.slidesReady = true;
         return UI.loading.hide();
+      }
+
+      if (!scope.collections && !scope.images) {
+        UI.loading.show('图片加载失败，请稍后再试试..');
+        $timeout(UI.loading.hide, 400);
       }
 
       UI.loading

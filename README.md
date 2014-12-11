@@ -43,7 +43,7 @@ $ cordova plugin add https://github.com/xu-li/cordova-plugin-wechat
 $ cordova platform add ios
 ```
 
-#### 开始真机调试
+#### 真机调试
 
 ```bash
 $ ionic build ios
