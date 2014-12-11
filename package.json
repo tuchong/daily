@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "ionic build ios",
-    "build-less": "node_modules/.bin/lessc -x src/less/app.less www/css/app.min.css",
-    "watch": "node_modules/.bin/rewatch src/less/*.less -c 'npm run build-less'",
+    "build-js": "bin/build-js.sh",
+    "build-less": "bin/build-less.sh",
+    "watch": "bin/watch.sh",
     "dev": "ionic serve & npm run watch",
     "start": "npm run dev"
   },
