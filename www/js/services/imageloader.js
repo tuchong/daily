@@ -40,6 +40,7 @@
       if (!scope.collections && !scope.images) {
         UI.loading.show('图片加载失败，请稍后再试试..');
         $timeout(UI.loading.hide, 400);
+        return;
       }
 
       UI.loading
