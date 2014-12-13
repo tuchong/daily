@@ -1,6 +1,5 @@
 {
   "name": "tuchong-daily",
-  "version": "0.2.0",
   "private": true,
   "main": "index.js",
   "scripts": {
@@ -11,19 +10,8 @@
     "dev": "ionic serve & npm run watch",
     "start": "npm run dev"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/turingou/ionic-leancloud.git"
-  },
-  "keywords": [
-    "ionic"
-  ],
   "author": "turing <o.u.turing@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/turingou/ionic-leancloud/issues"
-  },
-  "homepage": "https://github.com/turingou/ionic-leancloud",
   "devDependencies": {
     "less": "~1.7.3",
     "uglify-js": "^2.4.15",
