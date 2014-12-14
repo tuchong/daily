@@ -27,19 +27,26 @@
       return self.cache[type];
     }
 
+    // 应该将逻辑统一化
     function loadBackground(index, scope, type, id) {
-      if (index === undefined || index === null || isNaN(index)) return;
+      if (index === undefined || index === null || isNaN(index)) 
+        return;
 
-      if (log && scope.backgrounds[index]) {
-        if (log) log('Reading image from cache');
+      if (scope.backgrounds[index]) {
+        if (log) 
+          log('Reading image from cache');
         if (!scope.slidesReady) 
           scope.slidesReady = true;
+
         return UI.loading.hide();
       }
 
       if (!scope.collections && !scope.images) {
-        UI.loading.show('图片加载失败，请稍后再试试..');
+        UI.loading
+          .show('图片加载失败，请稍后再试试..');
+          
         $timeout(UI.loading.hide, 400);
+
         return;
       }
 
@@ -79,6 +86,7 @@
       img.onload = callback;
       img.onerror = onerror;
       img.src = uri + '.jpg';
+      img = null;
     }
   }
 
