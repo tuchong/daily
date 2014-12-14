@@ -38,10 +38,6 @@
     scope.updateSlides = updateSlides;
     scope.backgrounds = imageLoader.loadCache($stateParams.id);
 
-    // When Push Received,
-    // Jump to single collection page
-    scope.$on('pushNotificationReceived', pushNotificationReceived);
-
     var collection = Store.findById($stateParams.id);
 
     if (!collection) {
@@ -59,21 +55,6 @@
     }
 
     setup(collection);
-
-    function pushNotificationReceived(event, notification) {
-      if (notification.collectionId) {
-        $state.go('collection', {
-          id: notification.collectionId
-        });
-        return;
-      }
-
-      $cordovaDialogs.alert(
-        notification.alert, // message
-        '收到通知', // title,
-        '知道了' // button
-      )
-    }
 
     function setup(collection, fresh) {
       var lastIndex = localStorage.lastSlideIndexCollection;

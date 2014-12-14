@@ -36,10 +36,11 @@
       '$cordovaDialogs',
       '$ionicSlideBoxDelegate',
       '$rootScope',
+      '$state',
       init
     ]);
 
-  function init($ionicPlatform, $cordovaDevice, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $ionicSlideBoxDelegate, $rootScope) {
+  function init($ionicPlatform, $cordovaDevice, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $ionicSlideBoxDelegate, $rootScope, $state) {
     // Clear reading history
     if (localStorage.lastSlideIndexHome) 
       localStorage.removeItem('lastSlideIndexHome');
@@ -47,6 +48,10 @@
     // Listen to page changing event,
     // And jump to lastSlideIndex
     $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
+
+    // When Push Received,
+    // Jump to single collection page
+    $rootScope.$on('pushNotificationReceived', pushNotificationReceived);
 
     $ionicPlatform.ready(function() {
       var device = $cordovaDevice.getDevice();
@@ -103,11 +108,27 @@
         if (log) log(err);
 
         $cordovaDialogs.alert(
-          '(¬_¬)ﾉ 请手动在 设置 > 通知 启用推送', // message
+          // '(¬_¬)ﾉ 请手动在 设置 > 通知 启用推送' + err.toString(), // message
+          err,
           '获取推送权限失败...', // title,
           '知道了' // button
         )
       }
+    }
+
+    function pushNotificationReceived(event, notification) {
+      if (notification.collectionId) {
+        $state.go('collection', {
+          id: notification.collectionId
+        });
+        return;
+      }
+
+      $cordovaDialogs.alert(
+        notification.alert, // message
+        '收到通知', // title,
+        '知道了' // button
+      )
     }
 
     // When stats changes success, Go to the latest slide index
