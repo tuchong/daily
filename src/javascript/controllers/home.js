@@ -29,10 +29,6 @@
     scope.updateSlides = updateSlides;
     scope.backgrounds = imageLoader.loadCache('home');
 
-    // When Push Received,
-    // Jump to single collection page
-    scope.$on('pushNotificationReceived', pushNotificationReceived);
-
     // Show loading message
     UI.loading.show('<i class="icon ion-refreshing"></i> 努力加载中...');
 
@@ -41,21 +37,6 @@
       return setup(Store.cache.collections);
 
     fetchFresh();
-
-    function pushNotificationReceived(event, notification) {
-      if (notification.collectionId) {
-        $state.go('collection', {
-          id: notification.collectionId
-        });
-        return;
-      }
-
-      $cordovaDialogs.alert(
-        notification.alert, // message
-        '收到通知', // title,
-        '知道了' // button
-      )
-    }
 
     // Fetch fresh data from API server
     function fetchFresh(callback) {
