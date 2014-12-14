@@ -69,10 +69,6 @@
           if (log) log(err);
         }
       });
-
-      // org.apache.cordova.statusbar required
-      if (window.StatusBar)
-        StatusBar.styleDefault();
     });
 
     function authPushService(device, callback) {
