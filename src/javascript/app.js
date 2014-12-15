@@ -60,8 +60,15 @@
 
       if (log) {
         log(device);
-        log('network:');
         log(newtork);
+      }
+
+      if (newtork !== 'wifi' && newtork !== 'Connection.WIFI') {
+        $cordovaDialogs.alert(
+          '检查到当前使用的网络不是 Wi-Fi，除非您使用 3G/4G 网络，图虫日报不建议在非 Wi-Fi 网络下加载大图', // message
+          'ヾ(´ρ｀)〃 流量提示', // title,
+          '继续浏览'
+        );
       }
 
       authPushService(device, function(installation){
