@@ -30,6 +30,7 @@
     .run([
       '$ionicPlatform',
       '$cordovaDevice', 
+      '$cordovaNetwork',
       '$cordovaPush',
       '$timeout',
       'avoscloud',
@@ -40,7 +41,7 @@
       init
     ]);
 
-  function init($ionicPlatform, $cordovaDevice, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $ionicSlideBoxDelegate, $rootScope, $state) {
+  function init($ionicPlatform, $cordovaDevice, $cordovaNetwork, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $ionicSlideBoxDelegate, $rootScope, $state) {
     // Clear reading history
     if (localStorage.lastSlideIndexHome) 
       localStorage.removeItem('lastSlideIndexHome');
@@ -55,7 +56,13 @@
 
     $ionicPlatform.ready(function() {
       var device = $cordovaDevice.getDevice();
-      if (log) log(device);
+      var newtork = $cordovaNetwork.getNetwork();
+
+      if (log) {
+        log(device);
+        log('network:');
+        log(newtork);
+      }
 
       authPushService(device, function(installation){
         if (log) log(installation);
@@ -78,9 +85,9 @@
 
     function authPushService(device, callback) {
       var options = {
-        "badge":"true",
-        "sound":"true",
-        "alert":"true"
+        "badge": "true",
+        "sound": "true",
+        "alert": "true"
       };
 
       $cordovaPush
@@ -99,6 +106,11 @@
 
         if (installation.deviceType === 'android')
           installation.installationId = token;
+
+        angular.forEach(['model', 'uuid', 'version'], function(item){
+          if (device[item])
+            installation[item] = device[item];
+        });
 
         return callback(installation);
       }, pushSignupError);
