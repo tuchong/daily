@@ -17,9 +17,25 @@
     width: 100%;
     height: 100%;
     background-size: cover;
+  
+    #backgroud-desktop {
+      display: block;
+    }
+
+    #backgroud-mobile {
+      display: none;
+    }
 
     @media (max-width: @mobile) {
       background-image: url(@mobileBackground);
+
+      #backgroud-mobile {
+        display: block;
+      }
+
+      #backgroud-desktop {
+        display: none;
+      }
     }
 
     .copyright {
@@ -27,11 +43,13 @@
       right: 20px;
       bottom: 20px;
       z-index: 9;
-      color: #999;
+      color: #efefef;
       font-size: 12px;
+      text-align: center;
+      width: 100%;
 
       a {
-        color: #999;
+        color: #efefef;
         text-decoration: none;
       }
     }
