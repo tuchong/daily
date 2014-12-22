@@ -1,4 +1,5 @@
-@mobile: 700px;
+@mobile: 600px;
+
 @desktopBackground: "http://photos.tuchong.com/105478/f/20775048.jpg"; 
 @mobileBackground: "http://photos.tuchong.com/55422/f/23724348.jpg";
 
@@ -88,6 +89,21 @@
         letter-spacing: 6px;
       }
     }
+
+    @media (max-width: @mobile) {
+      h1 {
+        height: 80px;
+        padding-top: 15px;
+        padding-left: 130px;
+        background-size: 25%;
+        background-position: 30px center;
+        font-size: 32px;
+        letter-spacing: 8px;
+        span {
+          font-size: 14px;
+        }
+      }
+    }
   }
 
   .downloads {
@@ -110,6 +126,11 @@
         color: #000;
         opacity: 1;
       }
+    }
+
+    @media (max-width: @mobile) {
+      margin-left: 30px;
+      margin-right: 30px;
     }
   }
 
