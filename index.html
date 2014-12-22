@@ -8,9 +8,9 @@
   <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="dist/daily.min.css">
+  <script src="bower_components/wechat.js/dist/wechat.min.js"></script>
 </head>
 <body class="landing">
-  
   <section class="title">
     <div class="logo">
       <h1>
@@ -39,5 +39,23 @@
       </div>
     </div>
   </section>
+
+  <script>
+    (function(window){
+      var wechat = window.wechat;
+      var data = {
+        'app': 'wx4e334ba0d436000a',
+        'img': 'http://tuchong.github.io/daily/images/icon-w108.png',
+        'link': 'http://daily.tuchong.com',
+        'desc': '每日精选图虫热门图片推送',
+        'title': '图虫日报'
+      };
+
+      wechat.friend('friend', data);
+      wechat.friend('timeline', data);
+      wechat.friend('weibo', data);
+      wechat.friend('email', data);
+    })(this)
+  </script>
 </body>
 </html>

@@ -1,0 +1,32 @@
+{
+  "name": "wechat.js",
+  "main": "wechat.js",
+  "version": "0.1.2",
+  "homepage": "https://github.com/sofish/wechat.js",
+  "authors": [
+    "Sofish"
+  ],
+  "description": "Easy sharing on Wechat",
+  "keywords": [
+    "wechat",
+    "wechat.js"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "_release": "0.1.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.1.2",
+    "commit": "0927684534f7d3917f12f3aad5cf7237a1fb854f"
+  },
+  "_source": "https://github.com/sofish/wechat.js.git",
+  "_target": "~0.1.2",
+  "_originalSource": "wechat.js",
+  "_direct": true
+}
