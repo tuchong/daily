@@ -1,0 +1,15 @@
+{
+  "name": "tuchong-daily",
+  "private": true,
+  "scripts": {
+    "build-less": "node_modules/.bin/lessc -x less/daily.less dist/daily.min.css",
+    "serve": "node_modules/.bin/serve --no-less .",
+    "watch": "node_modules/.bin/rewatch less/*.less -c 'npm run build-less'",
+    "dev": "npm run serve & npm run watch"
+  },
+  "devDependencies": {
+    "less": "~1.7.3",
+    "rewatch": "~0.2.2",
+    "serve": "~1.4.0"
+  }
+}
