@@ -43,6 +43,10 @@
   <script>
     (function(window){
       var wechat = window.wechat;
+
+      if (!wechat)
+        return;
+
       var data = {
         'app': 'wx4e334ba0d436000a',
         'img': 'http://tuchong.github.io/daily/images/icon-w108.png',
@@ -51,10 +55,10 @@
         'title': '图虫日报'
       };
 
-      wechat.friend('friend', data);
-      wechat.friend('timeline', data);
-      wechat.friend('weibo', data);
-      wechat.friend('email', data);
+      wechat('friend', data);
+      wechat('timeline', data);
+      wechat('weibo', data);
+      wechat('email', data);
     })(this)
   </script>
 </body>
