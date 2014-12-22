@@ -1,3 +1,98 @@
+@mobile: 700px;
+@desktopBackground: "http://photos.tuchong.com/105478/f/20775048.jpg"; 
+@mobileBackground: "http://photos.tuchong.com/55422/f/23724348.jpg";
+
 .landing {
-  
+  -webkit-user-select:none;
+
+  .background {
+    background-repeat: no-repeat;
+    background-image: url(@desktopBackground);
+    background-size: cover;
+    background-position: center;
+    position: fixed;
+    z-index: -1;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+
+    @media (max-width: @mobile) {
+      background-image: url(@mobileBackground);
+    }
+
+    .copyright {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 9;
+      color: #999;
+      font-size: 12px;
+
+      a {
+        color: #999;
+        text-decoration: none;
+      }
+    }
+  }
+
+  .title {
+    position: fixed;
+    top: 140px;
+    z-index: 999;
+    width: 320px;
+    left: 50%;
+    margin-left: -160px;
+
+    @media (max-width: @mobile) {
+      top: 0px;
+    }
+  }
+
+  .logo {
+    h1 {
+      font-weight: normal;
+      font-size: 40px;
+      float: left;
+      color: #fff;
+      text-shadow: 0px 1px 4px #444;
+      text-decoration: none;
+      height: 100px;
+      display: block;
+      padding-left: 140px;
+      padding-top: 10px;
+      background: url("../images/icon-w108.png") no-repeat;
+      letter-spacing: 4px;
+      span {
+        display: block;
+        font-size: 16px;
+        letter-spacing: 6px;
+      }
+    }
+  }
+
+  .downloads {
+    clear: both;
+    a {
+      display: block;
+      background-color: transparent;
+      border: 2px solid #fff;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      color: #fff;
+      text-align: center;
+      line-height: 40px;
+      text-decoration: none;
+      font-size: 16px;
+      opacity: .9;
+
+      &:hover {
+        background-color: #fff;
+        color: #000;
+        opacity: 1;
+      }
+    }
+  }
+
 }

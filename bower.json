@@ -2,7 +2,7 @@
   "name": "tuchong-daily",
   "private": true,
   "devDependencies": {
-    "bootstrap": "3.3.1",
-    "debug": "git@github.com:visionmedia/debug.git"
+    "normalize-css": "3.0.2",
+    "font-awesome": "4.2.0"
   }
 }

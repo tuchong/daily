@@ -2,26 +2,45 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>图虫日报</title>
+  <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="dist/daily.min.css">
 </head>
-<body>
-  <header>
-    <div class="container">
-      <div class="row">
-        
-      </div>
+<body class="landing">
+  
+  <section class="title">
+    <div class="logo">
+      <h1>
+        图虫日报
+        <span>每日图虫精选推送</span>
+      </h1>
     </div>
-  </header>
-  <section>
-    <div class="container">
-      <div class="row"></div>
+    <div class="downloads">
+      <a href="#" class="ios">
+        <i class="fa fa-apple"></i> 访问 iOS App Store 下载
+      </a>
     </div>
   </section>
-  <footer>
-    <div class="container">
-      <div class="row"></div>
+
+  <section class="background">
+    <div id="copyright" class="copyright">
+      <div class="post">
+        <span id="postText">「你我若不是旅人，这也不过是某个下班后困倦的黄昏」</span>
+        <a id="postAuthor" href="http://ojq12.tuchong.com/">@广州老表</a>
+      </div>
     </div>
-  </footer>
+  </section>
+  
+  <script>
+    (function(window){
+      var mobile = window.matchMedia('@media all and (max-width: 700px)');
+      if (!mobile) return;
+      
+      document.getElementById('postText').innerHTML = "123";
+    })(this);
+  </script>
 </body>
 </html>
