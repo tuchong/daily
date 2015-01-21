@@ -4,12 +4,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-itunes-app" content="app-id=950625531" />
-  <title>图虫日报</title>
+  <title>图虫日报 - 每日图虫精选推送</title>
+  <meta name="title" content="图虫日报 - 每日图虫精选推送" >
+  <meta name="keywords" content="摄影,图片库,摄影社区,作品,器材,照片,专业,图片,上传,分享,拍照,照相,相册,Web2.0,博客" >
+  <meta name="description" content="图虫网是中国最专业的web2.0摄影社区，下属纪实、风光、人像、生态、黑白、器材、佳能、尼康、宾得等几十个专业摄影社区。海量的照片、相册和图博全部由摄影师共同管理和维护。" >
   <link rel="stylesheet" href="bower_components/normalize-css/normalize.css">
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="dist/daily.min.css">
-  <script src="bower_components/wechat.js/dist/wechat.min.js"></script>
 </head>
 <body class="landing">
   <section class="title">
@@ -40,25 +41,5 @@
       </div>
     </div>
   </section>
-
-  <script>
-    (function(window){
-      var wechat = window.wechat;
-
-      if (!wechat)
-        return;
-
-      var data = {
-        'app': 'wx4e334ba0d436000a',
-        'img': 'http://tuchong.github.io/daily/images/icon-w108.png',
-        'link': 'http://daily.tuchong.com',
-        'desc': '每日精选图虫热门图片推送',
-        'title': '图虫日报'
-      };
-
-      wechat('friend', data);
-      wechat('timeline', data);
-    })(this);
-  </script>
 </body>
 </html>
