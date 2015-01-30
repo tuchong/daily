@@ -1,6 +1,7 @@
 ## Roadmap
 
 ### v0.4.0
+[ ] 使用 `angular-vs-repeat` 替换当前的 lazyload 技术方案
 [ ] 打平父子图片之间的关系，直接推送一个大图片数组
 
 ### v0.5.0
