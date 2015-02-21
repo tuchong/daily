@@ -1,11 +1,7 @@
-;(function(angular, debug) {
+;(function(window) {
   'use strict';
-  var log;
 
-  if (!angular)
-    throw new Error('Angular.js is required');
-  if (debug)
-    log = debug('tuchong-daily:app');
+  var angular = window.angular;
 
   angular
     .module('tuchong-daily', [
@@ -210,4 +206,4 @@
     $urlRouterProvider.otherwise('/');
   }
 
-})(window.angular, window.debug);
+})(this);
