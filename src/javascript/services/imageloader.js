@@ -7,12 +7,12 @@
   angular
     .module('tuchong-daily')
     .service('imageLoader', [
-      'UI',
+      '$ionicLoading',
       '$timeout',
       imageLoader
     ]);
 
-  function imageLoader(UI, $timeout) {
+  function imageLoader($ionicLoading, $timeout) {
     var self = this;
     this.load = loadBackground;
     this.loadCache = loadCache;
@@ -167,20 +167,19 @@
         if (!scope.slidesReady)
           scope.slidesReady = true;
 
-        return UI.loading.hide();
+        return $ionicLoading.hide();
       }
 
       if (!scope.collections && !scope.images) {
-        UI.loading
-          .show('图片加载失败，请稍后再试试..');
-
-        $timeout(UI.loading.hide, 400);
+        loadError();
+        $timeout($ionicLoading.hide, 400);
 
         return;
       }
 
-      UI.loading
-        .show('<i class="icon ion-loading-c"></i> 图片加载中...');
+      $ionicLoading.show(
+        template: '<i class="icon ion-loading-c"></i> 图片加载中...'
+      );
 
       var image = type === 'home' ?
         scope.collections[index].images[0].uri :
@@ -199,12 +198,13 @@
         var cacheKey = type === 'home' ? type : id;
         self.cache[cacheKey] = scope.backgrounds;
 
-        UI.loading.hide();
+        $ionicLoading.hide();
       }
 
       function loadError() {
-        UI.loading
-          .show('图片加载失败，请稍后再试试...');
+        $ionicLoading.show(
+          template: '图片加载失败，请稍后再试试...'
+        );
       }
     }
 

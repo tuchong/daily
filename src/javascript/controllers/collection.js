@@ -1,5 +1,6 @@
-;(function(angular, window) {
+;(function(window) {
   'use strict';
+
   var angular = window.angular;
   var localStorage = window.localStorage;
 
@@ -8,7 +9,7 @@
     .controller('collection', [
       '$scope',
       'Store',
-      'UI',
+      '$ionicLoading',
       '$ionicSlideBoxDelegate',
       '$stateParams',
       '$state',
@@ -27,7 +28,7 @@
       single
     ])
 
-  function collection(scope, Store, UI, $ionicSlideBoxDelegate, $stateParams, $state, imageLoader, $ionicSideMenuDelegate, share, $timeout, $cordovaDialogs) {
+  function collection(scope, Store, $ionicLoading, $ionicSlideBoxDelegate, $stateParams, $state, imageLoader, $ionicSideMenuDelegate, share, $timeout, $cordovaDialogs) {
     scope.toggle = toggle;
     scope.share = share.popup;
     scope.viewLarge = viewLarge;
@@ -40,11 +41,9 @@
       Store.post.get({
         postId: $stateParams.id
       }, function(result){
-        if (log) log(result);
         collection = result;
         setup(result, true);
       }, function(err) {
-        if (log) log(err);
         $state.go('home');
       });
       return;
@@ -69,12 +68,12 @@
     }
 
     function updateSlides(index) {
-      if (log) log('Switching to slide: [%s]', index);
+      console.log('Switching to slide: [%s]', index);
 
       imageLoader.load(index, scope, 'collection', $stateParams.id);
       localStorage.lastSlideIndexCollection = index;
 
-      if (log) log('Set lastSlideIndexCollection to %s', index);
+      console.log('Set lastSlideIndexCollection to %s', index);
 
       if (!scope.images[index + 1] && collection.images[index + 1])
         scope.images.push(collection.images[index + 1]);
@@ -93,10 +92,11 @@
         parseInt(localStorage.lastSlideIndexCollection) : 0;
 
       if (!scope.images || !scope.images[index]) {
-        UI.loading
-          .show('<i class="icon ion-information-circled"></i> 啊喔，找不到大图了')
+        $ionicLoading.show(
+          template: '<i class="icon ion-information-circled"></i> 啊喔，找不到大图了'
+        );
 
-        $timeout(UI.loading.hide, 500);
+        $timeout($ionicLoading.hide, 500);
         return;
       }
 
