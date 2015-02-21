@@ -54,10 +54,8 @@
       var device = $cordovaDevice.getDevice();
       var newtork = $cordovaNetwork.getNetwork();
 
-      if (log) {
-        log(device);
-        log(newtork);
-      }
+      console.log(device);
+      console.log(newtork);
 
       if (newtork !== 'wifi' && newtork !== 'Connection.WIFI') {
         $cordovaDialogs.alert(
@@ -68,7 +66,7 @@
       }
 
       authPushService(device, function(installation){
-        if (log) log(installation);
+        console.log(installation);
 
         avoscloud
           .installations
@@ -76,12 +74,12 @@
 
         // When sync device infomation success
         function syncInstallationSuccess(result) {
-          if (log) log(result);
+          console.log(result);
         }
 
         // Ignore the error for tmp.
         function syncError(err) {
-          if (log) log(err);
+          console.log(err);
         }
       });
     });
@@ -96,7 +94,6 @@
       $cordovaPush
         .register(options)
         .then(function(token) {
-        if (log) log('Push service signup success, token: %s', token);
 
         var installation = {};
 
@@ -120,8 +117,6 @@
 
       // Ignore the error for tmp.
       function pushSignupError(err) {
-        if (log) log(err);
-
         $cordovaDialogs.alert(
           // '(¬_¬)ﾉ 请手动在 设置 > 通知 启用推送' + err.toString(), // message
           err,
@@ -148,7 +143,7 @@
 
     // When stats changes success, Go to the latest slide index
     function stateChangeSuccess(e, toState, toParams, fromState, fromParams) {
-      if (log) log('%s => %s', fromState.name || 'init', toState.name);
+      console.log('%s => %s', fromState.name || 'init', toState.name);
 
       var isGoBackHome = toState.name === 'home' && fromState.name;
       var isGoToCollection = fromState.name === 'home' && toState.name === 'collection';
@@ -165,8 +160,6 @@
         gotoIndex = 0;
 
       gotoIndex = parseInt(gotoIndex);
-
-      if (log) log('Going back to %s', gotoIndex);
 
       // Slide to last visited index.
       $timeout(function(){
