@@ -1,11 +1,7 @@
-;(function(angular, debug, localStorage) {
+;(function(angular, window) {
   'use strict';
-  var log;
-
-  if (!angular)
-    throw new Error('Angular.js is required');
-  if (debug)
-    log = debug('tuchong-daily:Controller:Collection');
+  var angular = window.angular;
+  var localStorage = window.localStorage;
 
   angular
     .module('tuchong-daily')
@@ -137,4 +133,4 @@
     }
   }
 
-})(window.angular, window.debug, window.localStorage);
+})(this);
