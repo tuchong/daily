@@ -1,5 +1,6 @@
 ;(function(window) {
   'use strict';
+
   var angular = window.angular;
   var localStorage = window.localStorage;
 
@@ -9,7 +10,7 @@
       '$scope',
       '$state',
       'Store',
-      'UI',
+      '$ionicLoading',
       '$ionicSlideBoxDelegate',
       '$timeout',
       '$rootScope',
@@ -19,14 +20,16 @@
       home
     ]);
 
-  function home(scope, $state, Store, UI, $ionicSlideBoxDelegate, $timeout, $rootScope, imageLoader, $cordovaDialogs, share) {
+  function home(scope, $state, Store, $ionicLoading, $ionicSlideBoxDelegate, $timeout, $rootScope, imageLoader, $cordovaDialogs, share) {
     scope.go = go;
     scope.share = share.popup;
     scope.updateSlides = updateSlides;
     scope.backgrounds = imageLoader.loadCache('home');
 
     // Show loading message
-    UI.loading.show('<i class="icon ion-refreshing"></i> 努力加载中...');
+    $ionicLoading.show(
+      template: '<i class="icon ion-refreshing"></i> 努力加载中...'
+    );
 
     // Read local cache from localStorage
     if (Store.cache.collections)
@@ -39,11 +42,12 @@
       Store.hot.get({}, success, fail);
 
       function success(data){
-        if (!data.collections)
-          return UI.loading.show('<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试');
-
-        if (log)
-          log('Reading fresh collections (%s)', data.collections.length);
+        if (!data.collections) {
+          $ionicLoading.show(
+            template: '<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试'
+          );
+          return;
+        }
 
         // Setup a few slides
         setup(data.collections, true);
@@ -55,8 +59,9 @@
       }
 
       function fail(err){
-        UI.loading
-          .show('<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试');
+        $ionicLoading.show(
+          template: '<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试'
+        );
 
         if (callback)
           callback();
@@ -83,7 +88,7 @@
     function updateSlides(index) {
       if (isNaN(index)) index = 0;
 
-      if (log) log('Switching to slide: [%s]', index);
+      console.log('Switching to slide: [%s]', index);
 
       // Loading this slide's backgroud-image
       imageLoader.load(index, scope, 'home');
@@ -95,7 +100,7 @@
       // Update the latest index of home slides
       localStorage.lastSlideIndexHome = index;
 
-      if (log) log('Set lastSlideIndexHome to %s', index);
+      console.log('Set lastSlideIndexHome to %s', index);
 
       $ionicSlideBoxDelegate.update();
     }
@@ -107,10 +112,11 @@
       if (isValidCollection)
         return $state.go('collection', {id: id});
 
-      UI.loading
-        .show('<i class="icon ion-information-circled"></i> 这个相册只有一张图');
+      $ionicLoading.show(
+        template: '<i class="icon ion-information-circled"></i> 这个相册只有一张图'
+      );
 
-      $timeout(UI.loading.hide, 400);
+      $timeout($ionicLoading.hide, 400);
     }
   }
 
