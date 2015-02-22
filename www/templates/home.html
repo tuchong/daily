@@ -1,15 +1,21 @@
 <ion-view title="<i class='icon tuchong-daily-logo'> 图虫日报">
-  <ion-content scroll="false">
-    <ion-slide-box 
-      on-slide-changed="updateSlides($index)" 
-      show-pager="false">
 
-      <ion-slide ng-repeat="collection in collections" 
-        ng-style="{'background-image': backgrounds[$index] ? 'url(' + backgrounds[$index] + '.jpg)' : '' }" 
-        on-tap="go(collection.postId, collection.images.length)" 
-        ng-show="slidesReady" on-hold="share(collection.images[0], collection.post)">
+  <div class="swiper-container swiper-container-collection">
+    <div class="swiper-wrapper">
 
-        <div class="post" ng-show="collection.post">
+      <div class="swiper-slide"
+        ng-show="slidesReady"
+        ng-repeat="(cIndex, collection) in collections" 
+        on-hold="share(collection.images[0], collection.post)">
+
+        <div class="background-full" 
+          ng-if="backgrounds[cIndex] && collection.images.length === 1">
+          <img class="background-medium" 
+            ng-src="{{ backgrounds[cIndex] }}" />
+        </div>
+
+        <div class="post" 
+          ng-if="collection.post && collection.images.length === 1">
           <div class="entry">
 
             <p class="title" 
@@ -33,8 +39,70 @@
           </div>
         </div>
 
-      </ion-slide>
+        <!-- collection children -->
+        <div class="swiper-container swiper-container-children"
+          ng-if="collection.images.length > 1">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" 
+              ng-repeat="image in collection.images">
 
-    </ion-slide-box>
-  </ion-content>
+              <div class="background-full">
+                <img class="background-medium" 
+                  ng-src="{{ $index == 0 ? backgrounds[cIndex] : image.uri + '.jpg' }}" />
+              </div>
+
+              <div class="post">
+                <div class="entry">
+
+                  <p class="title" 
+                    ng-if="$index == 0"
+                    ng-bind="collection.post.title" 
+                    ng-show="collection.post.title">
+                  </p>
+
+                  <p class="author clearfix" ng-if="$index == 0">
+                    <img ng-src="{{collection.post.author.icon}}" 
+                      class="author-avatar" alt="" />
+
+                    <span ng-bind="collection.post.author.name" 
+                      ng-class="{valign: !!!image.exif.camera}"></span>
+
+                    <span class="camera" 
+                      ng-show="image.exif.camera">
+                      <i class="icon ion-camera"></i>
+                      <i ng-bind="image.exif.camera.name" ></i>
+                    </span>
+                  </p>
+
+                  <p class="camera post-single" 
+                    ng-if="$index > 0"
+                    ng-show="image.exif.camera && image.exif.camera.name">
+                    <i class="icon ion-camera"></i>
+                    <i ng-bind="image.exif.camera.name"></i>
+                  </p>
+                  <p class="exif post-single" 
+                    ng-if="$index > 0"
+                    ng-show="image.exif.exposure">
+                    <i class="icon ion-ios7-information-outline"></i>
+                    <i ng-bind="image.exif.exposure"></i>
+                  </p>
+                  <p class="lens post-single" 
+                    ng-if="$index > 0"
+                    ng-show="image.exif.lens && image.exif.lens.name">
+                    <i class="icon ion-eye"></i>
+                    <i ng-bind="image.exif.lens.name"></i>
+                  </p>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
 </ion-view>
