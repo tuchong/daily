@@ -3,18 +3,21 @@
   <div class="swiper-container swiper-container-collection">
     <div class="swiper-wrapper">
 
+      <!-- main collection -->
       <div class="swiper-slide"
         ng-show="slidesReady"
-        ng-repeat="(cIndex, collection) in collections" 
-        on-hold="share(collection.images[0], collection.post)">
+        ng-repeat="(cIndex, collection) in collections">
 
         <div class="background-full" 
+          on-double-tap="openZoom(backgrounds[cIndex])"
+          on-hold="share(collection.images[0], collection.post)"
           ng-if="backgrounds[cIndex] && collection.images.length === 1">
           <img class="background-medium" 
             ng-src="{{ backgrounds[cIndex] }}" />
         </div>
-
+        
         <div class="post" 
+          on-hold="share(collection.images[0], collection.post)"
           ng-if="collection.post && collection.images.length === 1">
           <div class="entry">
 
@@ -44,6 +47,8 @@
           ng-if="collection.images.length > 1">
           <div class="swiper-wrapper">
             <div class="swiper-slide" 
+              on-hold="share(image, collection.post)"
+              on-double-tap="openZoom($index == 0 ? backgrounds[cIndex] : image.uri + '.jpg')"
               ng-repeat="image in collection.images">
 
               <div class="background-full">
@@ -104,5 +109,18 @@
 
     </div>
   </div>
+  
+  <script id="zoom-modal" type="text/ng-template">
+    <ion-scroll 
+      zooming="true" 
+      direction="xy" 
+      max-zoom="1"
+      scrollbar-x="false"
+      scrollbar-y="false">
+      <img ng-src="{{ zoomImage }}" 
+        style="margin: 0 auto; display: block;"
+        on-double-tap="hideZoom()" />
+    </ion-scroll>
+  </script>
 
 </ion-view>
