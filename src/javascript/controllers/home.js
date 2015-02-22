@@ -12,19 +12,19 @@
       'Store',
       '$ionicLoading',
       '$timeout',
-      '$rootScope',
       'imageLoader',
-      '$cordovaDialogs',
       'share',
+      '$ionicModal',
       home
     ]);
 
-  function home(scope, $state, Store, $ionicLoading, $timeout, $rootScope, imageLoader, $cordovaDialogs, share) {
+  function home(scope, $state, Store, $ionicLoading, $timeout, imageLoader, share, $ionicModal) {
     scope.share = share.popup;
+    scope.openZoom = openZoom;
+    scope.hideZoom = hideZoom;
 
     var slides;
     var backgrounds = scope.backgrounds = [];
-    // scope.backgrounds = imageLoader.loadCache('home');
 
     // Show loading message
     $ionicLoading.show({
@@ -86,7 +86,6 @@
 
         // Load next page
         loadImage(1);
-        loadImage(2);
       }, 10);
     }
 
@@ -102,6 +101,20 @@
           scope.$apply();
         }
       );
+    }
+
+    function openZoom(uri) {
+      scope.zoomImage = uri;
+
+      $ionicLoading.show({
+        scope: scope,
+        templateUrl: 'zoom-modal',
+        hideOnStateChange: true
+      });
+    }
+
+    function hideZoom() {
+      $ionicLoading.hide();
     }
   }
 })(this);
