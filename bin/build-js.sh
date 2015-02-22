@@ -1,7 +1,6 @@
 #!/bin/bash
 
 node_modules/.bin/uglifyjs \
-  src/javascript/libs/imageblob-loader.js \
   src/javascript/app.js \
   src/javascript/services/store.js \
   src/javascript/services/share.js \
