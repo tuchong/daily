@@ -89,15 +89,6 @@
     margin-bottom: 0px;
     padding-bottom: 3px;
   }
-  .background-medium {
-    display: block;
-    width: 100%;
-    object-fit: cover;
-    height: 100%;
-  }
-  .background-full {
-    height: 100%;
-  }
   .list-sidebar {
     border: 0px;
     color: #fff;
@@ -179,10 +170,6 @@ ion-content {
 
 .swiper-slide {
   color: #000;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  background-color: #444;
   height: 100%;
 
   display: -webkit-box;
@@ -197,4 +184,28 @@ ion-content {
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: center;
+
+  .background-full {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-color: #444;
+  }
+
+  .background-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.zoom-image-wrapper {
+  margin: -20px;
+  .zoom-image {
+    margin: 0 auto; 
+    display: block;
+  }
 }
