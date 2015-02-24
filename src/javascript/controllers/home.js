@@ -20,6 +20,8 @@
 
   function home(scope, $state, Store, $ionicLoading, $timeout, imageLoader, share, $ionicModal) {
     scope.share = share.popup;
+    scope.fetchBackground = fetchBackground;
+    scope.makeCssUri = makeCssUri;
     scope.openZoom = openZoom;
     scope.hideZoom = hideZoom;
 
@@ -115,6 +117,21 @@
 
     function hideZoom() {
       $ionicLoading.hide();
+    }
+
+    function fetchBackground(parentIndex, uri, index) {
+      if (uri) {
+        if (index === 0)
+          return backgrounds[parentIndex];
+
+        return uri;
+      }
+
+      return backgrounds[parentIndex] || "";
+    }
+
+    function makeCssUri(str) {
+      return 'url(' + str + ')';
     }
   }
 })(this);
