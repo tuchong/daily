@@ -30,7 +30,7 @@
 
     // Show loading message
     $ionicLoading.show({
-      template: '<i class="icon ion-refreshing"></i> 努力加载中...'
+      template: '<i class="icon ion-refresh"></i> 正在刷新...'
     });
 
     // Read local cache from localStorage
@@ -46,7 +46,7 @@
       function success(data){
         if (!data.collections) {
           $ionicLoading.show({
-            template: '<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试'
+            template: '<i class="icon ion-ios-close-outline"></i> 网络连接失败...请稍后再试'
           });
           return;
         }
@@ -59,7 +59,7 @@
 
       function fail(err) {
         $ionicLoading.show({
-          template: '<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试'
+          template: '<i class="icon ion-ios-close-outline"></i> 网络连接失败...请稍后再试'
         });
       }
     }
