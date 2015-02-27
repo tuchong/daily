@@ -18,7 +18,7 @@
 
     function load(uri, callback) {
       $ionicLoading.show({
-        template: '<i class="icon ion-loading-c"></i> 图片加载中...'
+        template: '<i class="icon ion-images"></i> 载入照片中...'
       });
 
       var img = new BlobImage(ismobile ? uri : proxy(uri));

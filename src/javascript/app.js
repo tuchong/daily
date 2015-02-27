@@ -118,7 +118,6 @@
       // Ignore the error for tmp.
       function pushSignupError(err) {
         $cordovaDialogs.alert(
-          // '(¬_¬)ﾉ 请手动在 设置 > 通知 启用推送' + err.toString(), // message
           err,
           '获取推送权限失败...', // title,
           '知道了' // button
