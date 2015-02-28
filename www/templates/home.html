@@ -49,7 +49,7 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide" 
               on-hold="share(image, collection.post)"
-              on-double-tap="openZoom(fetchBackground(cIndex, image.uri + '.jpg', $index))"
+              on-double-tap="openZoom(fetchBackground(cIndex, childrens[cIndex][$index], $index))"
               ng-repeat="image in collection.images">
 
               <div class="background-full" 
