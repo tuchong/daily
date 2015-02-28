@@ -17,9 +17,7 @@
     this.load = load;
 
     function load(uri, callback) {
-      $ionicLoading.show({
-        template: '<i class="icon ion-images"></i> 载入照片中...'
-      });
+      $ionicLoading.show();
 
       var img = new BlobImage(ismobile ? uri : proxy(uri));
       img.element.onload = success;
