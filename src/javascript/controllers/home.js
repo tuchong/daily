@@ -20,7 +20,6 @@
 
   function home(scope, $state, Store, $ionicLoading, $timeout, imageLoader, share, $ionicModal) {
     scope.share = share.popup;
-    scope.fetchBackground = fetchBackground;
     scope.makeCssUri = makeCssUri;
     scope.openZoom = openZoom;
     scope.hideZoom = hideZoom;
@@ -49,7 +48,7 @@
           return fail();
 
         // Setup a few slides
-        setup(data.collections, true);
+        setup(data.collections);
         // Save all data to cache
         Store.save('collections', data.collections);
       }
@@ -89,7 +88,7 @@
             var index = slides.activeIndex;
             loadImage(index);
 
-            if (scope.collections[index].images.length > 1 && 'undefined' === typeof childrenSlides[index]) {
+            if (scope.collections[index].images.length > 1 && 'undefined' === typeof(childrenSlides[index])) {
               (function(ii) {
                 setupChildrenSwiper(ii);
 
@@ -155,18 +154,10 @@
       $ionicLoading.hide();
     }
 
-    function fetchBackground(parentIndex, uri, index) {
-      if (uri) {
-        if (index === 0)
-          return backgrounds[parentIndex];
-
-        return uri;
-      }
-
-      return backgrounds[parentIndex] || "";
-    }
-
     function makeCssUri(str) {
+      if (!str)
+        return 'none';
+      
       return 'url(' + str + ')';
     }
   }
