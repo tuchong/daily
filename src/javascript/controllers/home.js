@@ -1,5 +1,4 @@
-;
-(function(window) {
+;(function(window) {
   'use strict';
 
   var angular = window.angular;
@@ -26,8 +25,8 @@
     scope.openZoom = openZoom;
     scope.hideZoom = hideZoom;
 
-    window.slides = null;
-    window.childrenSlides = {};
+    var slides = null;
+    var childrenSlides = {};
 
     var backgrounds = scope.backgrounds = [];
     var childrens = scope.childrens = {};
@@ -46,12 +45,8 @@
       Store.hot.get({}, success, fail);
 
       function success(data) {
-        if (!data.collections) {
-          $ionicLoading.show({
-            template: '<i class="icon ion-ios-close-outline"></i> 网络连接失败...请稍后再试'
-          });
-          return;
-        }
+        if (!data.collections)
+          return fail();
 
         // Setup a few slides
         setup(data.collections, true);
@@ -63,6 +58,7 @@
         $ionicLoading.show({
           template: '<i class="icon ion-ios-close-outline"></i> 网络连接失败...请稍后再试'
         });
+        return false;
       }
     }
 
@@ -129,7 +125,6 @@
     }
 
     function loadChildImage(parentIndex, index) {
-      console.log(parentIndex, index);
       if (Array.isArray(scope.childrens[parentIndex]) && scope.childrens[parentIndex][index])
         return;
 
