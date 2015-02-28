@@ -38,6 +38,8 @@
                 <i ng-bind="collection.images[0].exif.camera.name" ></i>
               </span>
             </p>
+
+            <div class="pager">1/1</div>
           </div>
         </div>
 
@@ -96,6 +98,8 @@
                     <i ng-bind="image.exif.lens.name"></i>
                   </p>
 
+                  <div class="pager" ng-bind="($index + 1) + '/' + collection.images.length"></div>
+
                 </div>
               </div>
 
@@ -107,7 +111,7 @@
 
     </div>
   </div>
-  
+
   <script id="zoom-modal" type="text/ng-template">
     <ion-scroll 
       zooming="true" 
