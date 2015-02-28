@@ -11,7 +11,7 @@
         <div class="background-full" 
           on-double-tap="openZoom(backgrounds[cIndex])"
           on-hold="share(collection.images[0], collection.post)"
-          ng-style="{'background-image': makeCssUri(fetchBackground(cIndex)) }"
+          ng-style="{'background-image': makeCssUri(backgrounds[cIndex]) }"
           ng-if="backgrounds[cIndex] && collection.images.length === 1">
         </div>
         
@@ -49,11 +49,11 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide" 
               on-hold="share(image, collection.post)"
-              on-double-tap="openZoom(fetchBackground(cIndex, childrens[cIndex][$index], $index))"
+              on-double-tap="openZoom(childrens[cIndex][$index])"
               ng-repeat="image in collection.images">
 
               <div class="background-full" 
-                ng-style="{'background-image': makeCssUri(fetchBackground(cIndex, childrens[cIndex][$index], $index)) }">
+                ng-style="{'background-image': makeCssUri(childrens[cIndex][$index]) }">
               </div>
 
               <div class="post">
