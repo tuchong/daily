@@ -47,11 +47,21 @@
       margin-left: 5%;
       padding-bottom: 3%;
       padding-top: 20px;
+      position: relative;
+
+      .pager {
+        position: absolute;
+        right: 0px;
+        bottom: 15px;
+        font-size: 18px;
+        color: #ddd;
+      }
     }
 
     .title {
       font-size: 16px;
       font-weight: bold;
+      margin-bottom: 13px;
     }
 
     .excerpt {
@@ -60,20 +70,22 @@
 
     .author-avatar {
       border-radius: 50px;
-      box-shadow: 0px 1px 3px #555;
       width: 40px;
       height: 40px;
       float: left;
     }
 
-    .author img {
-      float: left;
-      margin-right: 12px;
-    }
+    .author {
+      margin-bottom: 3px;
 
-    .author span {
-      line-height: 20px;
-      display: block;
+      img {
+        float: left;
+        margin-right: 12px;
+      }
+      span {
+        line-height: 20px;
+        display: block;
+      }
     }
 
     .camera,
@@ -86,17 +98,8 @@
     }
   }
   .post-single {
-    p {
-      margin-bottom: 0px;
-      padding-bottom: 3px;
-    }
-  }
-  .slider-slide {
-    color: #000;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-color: #444;
+    margin-bottom: 0px;
+    padding-bottom: 3px;
   }
   .list-sidebar {
     border: 0px;
@@ -144,6 +147,9 @@
       letter-spacing: 4px;
     }
   }
+  .valign {
+    line-height: 40px !important;
+  }
 }
 
 ion-nav-bar {
@@ -168,10 +174,56 @@ ion-content {
   top: 0px !important;
 }
 
-.slider {
+// slides style
+.swiper-container {
+  width: 100%;
   height: 100%;
 }
 
-.valign {
-  line-height: 40px !important;
+.swiper-slide {
+  color: #000;
+  height: 100%;
+
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+
+  .background-full {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-color: #444;
+  }
+
+  .background-image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.zoom-wrapper {
+  margin: -20px;
+
+  .zoom-image {
+    display: block;
+    margin: 0 auto;
+  }
+}
+
+.action-sheet-has-icons .icon {
+  position: relative;
+  left: 0px;
 }
