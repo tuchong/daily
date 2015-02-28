@@ -17,12 +17,6 @@ $ bower install
 $ npm run dev
 ```
 
-确保在 Web 控制台启用 debug 模式：
-
-```bash
-$ debug.enable('tuchong-daily,tuchong-daily:*')
-```
-
 ### 应用调试
 
 #### 安装插件
