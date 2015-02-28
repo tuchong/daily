@@ -183,11 +183,6 @@
         templateUrl: 'templates/collection.html',
         controller: 'collection'
       })
-      .state('collection-single', {
-        url: '/images?uri',
-        templateUrl: 'templates/single.html',
-        controller: 'collection-single'
-      })
     
     // 404 Router
     $urlRouterProvider.otherwise('/');
