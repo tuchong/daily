@@ -38,16 +38,8 @@
     ]);
 
   function init($ionicPlatform, $cordovaDevice, $cordovaNetwork, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $rootScope, $state) {
-    // Clear reading history
-    if (localStorage.lastSlideIndexHome) 
-      localStorage.removeItem('lastSlideIndexHome');
-
-    // Listen to page changing event,
-    // And jump to lastSlideIndex
-    $rootScope.$on('$stateChangeSuccess', stateChangeSuccess);
-
     // When Push Received,
-    // Jump to single collection page
+    // Render this notified post as first post.
     $rootScope.$on('pushNotificationReceived', pushNotificationReceived);
 
     $ionicPlatform.ready(function() {
@@ -126,39 +118,13 @@
     }
 
     function pushNotificationReceived(event, notification) {
-      if (notification.collectionId) {
-        $state.go('collection', {
-          id: notification.collectionId
-        });
-        return;
-      }
+      var cId = notification.collectionId;
 
       $cordovaDialogs.alert(
         notification.alert, // message
         '收到通知', // title,
         '知道了' // button
       )
-    }
-
-    // When stats changes success, Go to the latest slide index
-    function stateChangeSuccess(e, toState, toParams, fromState, fromParams) {
-      console.log('%s => %s', fromState.name || 'init', toState.name);
-
-      var isGoBackHome = toState.name === 'home' && fromState.name;
-      var isGoToCollection = fromState.name === 'home' && toState.name === 'collection';
-      var isBackToCollection = fromState.name === 'collection-single' && toState.name === 'collection';
-
-      if (!isGoBackHome && !isGoToCollection && !isBackToCollection) return;
-      if (isGoToCollection) return;
-
-      var gotoIndex = isGoBackHome ?
-        localStorage.lastSlideIndexHome :
-        localStorage.lastSlideIndexCollection;
-
-      if (!gotoIndex)
-        gotoIndex = 0;
-
-      gotoIndex = parseInt(gotoIndex);
     }
   }
 
@@ -177,11 +143,6 @@
         url: '/',
         templateUrl: 'templates/home.html',
         controller: 'home'
-      })
-      .state('collection', {
-        url: '/collection/:id',
-        templateUrl: 'templates/collection.html',
-        controller: 'collection'
       })
     
     // 404 Router
