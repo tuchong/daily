@@ -95,7 +95,7 @@
                     ng-if="$index > 0"
                     ng-show="image.exif.lens && image.exif.lens.name">
                     <i class="icon ion-aperture"></i>
-                    <i ng-bind="image.exif.lens.name"></i>
+                    <i ng-bind="image.exif.lens.name | limitTo: 26"></i>
                   </p>
 
                   <div class="pager" ng-bind="($index + 1) + '/' + collection.images.length"></div>
