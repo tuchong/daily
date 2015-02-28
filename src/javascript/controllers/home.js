@@ -54,8 +54,11 @@
       Store[id ? 'post' : 'hot'].get(query, success, fail);
 
       function success(data) {
-        if (id)
+        if (id) {
+          data.postId = id;
           return setup([data]);
+        }
+
         if (!data.collections)
           return fail();
 
@@ -76,10 +79,11 @@
 
     // Setup slides view
     function setup(data) {
-      if (!scope.collections)
-        scope.collections = data;
-      else
-        scope.collections = data.concat(scope.collections);
+      var rendered = scope.collections && scope.collections.length > 0;
+
+      scope.collections = rendered ?
+        scope.collections.concat(data) : 
+        data;
 
       // Show befor init slides
       if (!scope.slidesReady)
@@ -88,19 +92,33 @@
       // Hide loading
       $ionicLoading.hide();
 
-      // Lazy loading the first slide's backgroud image
-      if (scope.collections[0].images.length === 1) {
-        loadImage(0);
+      var defaultIndex = rendered && data.length === 1 ? 
+        findIndex(data[0].postId, scope.collections) :
+        0;
+
+      // Lazy load the first slide's backgroud image
+      // Or selected slide's backgroud
+      if (scope.collections[defaultIndex].images.length === 1) {
+        loadImage(defaultIndex);
       } else {
         // Or its children
-        loadChildImage(0, 0);
+        loadChildImage(defaultIndex, 0);
         $timeout(function() {
-          setupChildrenSwiper(0);
+          setupChildrenSwiper(defaultIndex);
         }, 10);
       }
 
       // Init the slides on next tick
       $timeout(function() {
+        if (rendered && slides) {
+          slides.updateSlidesSize();
+
+          if (defaultIndex !== 0)
+            slides.slideTo(defaultIndex);
+
+          return;
+        }
+
         slides = new Swiper('.swiper-container-collection', {
           onSlideChangeStart: function() {
             var index = slides.activeIndex;
@@ -116,6 +134,15 @@
           }
         });
       }, 10);
+    }
+
+    function findIndex(id, arr) {
+      var target;
+      angular.forEach(arr, function(item, index){
+        if (item.postId === id)
+          target = index;
+      });
+      return target;
     }
 
     function setupChildrenSwiper(index) {
