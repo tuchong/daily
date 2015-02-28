@@ -98,6 +98,13 @@
                     <i ng-bind="image.exif.lens.name | limitTo: 26"></i>
                   </p>
 
+                  <p class="post-single"
+                    style="padding-right: 80px;" 
+                    ng-if="$index > 0 && collection.post.excerpt"
+                    ng-show="!image.exif.camera && !image.exif.exposure && !image.exif.lens">
+                    <i ng-bind="collection.post.excerpt | limitTo: 36"></i>
+                  </p>
+
                   <div class="pager" ng-bind="($index + 1) + '/' + collection.images.length"></div>
 
                 </div>
