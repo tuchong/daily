@@ -157,7 +157,7 @@
     // Update slides async
     function loadImage(index) {
       if (backgrounds[index])
-        return;
+        return scope.$apply();
 
       imageLoader.load(
         scope.collections[index].images[0].uri + '.jpg',
@@ -170,7 +170,7 @@
 
     function loadChildImage(parentIndex, index) {
       if (Array.isArray(scope.childrens[parentIndex]) && scope.childrens[parentIndex][index])
-        return;
+        return scope.$apply();
 
       if (!Array.isArray(scope.childrens[parentIndex]))
         scope.childrens[parentIndex] = [];
