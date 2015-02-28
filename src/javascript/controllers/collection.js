@@ -92,9 +92,9 @@
         parseInt(localStorage.lastSlideIndexCollection) : 0;
 
       if (!scope.images || !scope.images[index]) {
-        $ionicLoading.show(
+        $ionicLoading.show({
           template: '<i class="icon ion-information-circled"></i> 啊喔，找不到大图了'
-        );
+        });
 
         $timeout($ionicLoading.hide, 500);
         return;

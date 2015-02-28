@@ -1,4 +1,5 @@
-;(function(window) {
+;
+(function(window) {
   'use strict';
 
   var angular = window.angular;
@@ -25,8 +26,11 @@
     scope.openZoom = openZoom;
     scope.hideZoom = hideZoom;
 
-    var slides;
+    window.slides = null;
+    window.childrenSlides = {};
+
     var backgrounds = scope.backgrounds = [];
+    var childrens = scope.childrens = {};
 
     // Show loading
     $ionicLoading.show();
@@ -41,7 +45,7 @@
     function fetch() {
       Store.hot.get({}, success, fail);
 
-      function success(data){
+      function success(data) {
         if (!data.collections) {
           $ionicLoading.show({
             template: '<i class="icon ion-ios-close-outline"></i> 网络连接失败...请稍后再试'
@@ -73,20 +77,41 @@
       $ionicLoading.hide();
 
       // Lazy loading the first slide's backgroud image
-      loadImage(0);
+      if (scope.collections[0].images.length === 1) {
+        loadImage(0);
+      } else {
+        loadChildImage(0, 0);
+        $timeout(function() {
+          setupChildrenSwiper(0);
+        }, 10);
+      }
 
       // Init the slides on next tick
-      $timeout(function(){
-        slides = new Swiper('.swiper-container-collection');
+      $timeout(function() {
+        slides = new Swiper('.swiper-container-collection', {
+          onSlideChangeStart: function() {
+            var index = slides.activeIndex;
+            loadImage(index);
 
-        // if children exist, render a sub vertical slides.
-        new Swiper('.swiper-container-children', {
-          direction: 'vertical'
+            if (scope.collections[index].images.length > 1 && 'undefined' === typeof childrenSlides[index]) {
+              (function(ii) {
+                setupChildrenSwiper(ii);
+
+                loadChildImage(ii, 0);
+              })(index);
+            }
+          }
         });
-
-        // Load next page
-        loadImage(1);
       }, 10);
+    }
+
+    function setupChildrenSwiper(index) {
+      childrenSlides[index] = new Swiper('#children-' + index, {
+        direction: 'vertical',
+        onSlideChangeStart: function() {
+          loadChildImage(index, childrenSlides[index].activeIndex);
+        }
+      });
     }
 
     // Update slides async
@@ -98,6 +123,24 @@
         scope.collections[index].images[0].uri + '.jpg',
         function(localImage) {
           scope.backgrounds[index] = localImage;
+          scope.$apply();
+        }
+      );
+    }
+
+    function loadChildImage(parentIndex, index) {
+      console.log(parentIndex, index);
+      if (Array.isArray(scope.childrens[parentIndex]) && scope.childrens[parentIndex][index])
+        return;
+
+      if (!Array.isArray(scope.childrens[parentIndex])) {
+        scope.childrens[parentIndex] = [];
+      }
+
+      imageLoader.load(
+        scope.collections[parentIndex].images[index].uri + '.jpg',
+        function(localImage) {
+          scope.childrens[parentIndex][index] = localImage;
           scope.$apply();
         }
       );

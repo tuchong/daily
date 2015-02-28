@@ -45,15 +45,16 @@
 
         <!-- collection children -->
         <div class="swiper-container swiper-container-children"
-          ng-if="collection.images.length > 1">
+          ng-if="collection.images.length > 1" id="children-{{cIndex}}">
           <div class="swiper-wrapper">
             <div class="swiper-slide" 
               on-hold="share(image, collection.post)"
               on-double-tap="openZoom(fetchBackground(cIndex, image.uri + '.jpg', $index))"
+              id="chilren-{{cIndex}}-{{$index}}"
               ng-repeat="image in collection.images">
 
               <div class="background-full" 
-                ng-style="{'background-image': makeCssUri(fetchBackground(cIndex, image.uri + '.jpg', $index)) }">
+                ng-style="{'background-image': makeCssUri(fetchBackground(cIndex, childrens[cIndex][$index], $index)) }">
               </div>
 
               <div class="post">
@@ -119,7 +120,7 @@
       max-zoom="1"
       scrollbar-x="false"
       scrollbar-y="false"
-      class="zoom-image-wrapper">
+      class="zoom-wrapper">
       <img ng-src="{{ zoomImage }}" 
         class="zoom-image"
         on-double-tap="hideZoom()" />
