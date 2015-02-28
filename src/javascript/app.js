@@ -14,6 +14,7 @@
     .constant('API_SERVER', appConfigs.API_SERVER)
     .constant('API_TOKEN_KEY', 'tuchong-daily-token')
     .constant('TC_SERVER', 'http://tuchong.com/api/')
+    .constant('$ionicLoadingConfig', { template: '<ion-spinner icon="lines"></ion-spinner>' })
     .config([
       '$httpProvider',
       '$stateProvider', 

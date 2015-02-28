@@ -28,10 +28,8 @@
     var slides;
     var backgrounds = scope.backgrounds = [];
 
-    // Show loading message
-    $ionicLoading.show({
-      template: '<i class="icon ion-refresh"></i> 正在刷新...'
-    });
+    // Show loading
+    $ionicLoading.show();
 
     // Read local cache from localStorage
     if (Store.cache.collections)
