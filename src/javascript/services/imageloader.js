@@ -34,6 +34,8 @@
           template: '图片加载失败，请稍后再试试...'
         });
         img = null;
+
+        $timeout($ionicLoading.hide, 1000);
       }
 
       function proxy(realuri) {
