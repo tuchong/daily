@@ -50,7 +50,6 @@
             <div class="swiper-slide" 
               on-hold="share(image, collection.post)"
               on-double-tap="openZoom(fetchBackground(cIndex, image.uri + '.jpg', $index))"
-              id="chilren-{{cIndex}}-{{$index}}"
               ng-repeat="image in collection.images">
 
               <div class="background-full" 
