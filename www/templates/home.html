@@ -1,21 +1,136 @@
 <ion-view title="<i class='icon tuchong-daily-logo'> 图虫日报">
-  <ion-content scroll="false">
-    <ion-slide-box on-slide-changed="updateSlides($index)" show-pager="false">
-      <ion-slide ng-repeat="collection in collections" ng-style="{'background-image': backgrounds[$index] ? 'url(' + backgrounds[$index] + '.jpg)' : '' }" on-tap="go(collection.postId, collection.images.length)" ng-show="slidesReady" on-hold="share(collection.images[0], collection.post)">
-        <div class="post" ng-show="collection.post">
+
+  <div class="swiper-container swiper-container-collection">
+    <div class="swiper-wrapper">
+
+      <!-- main collection -->
+      <div class="swiper-slide"
+        ng-show="slidesReady"
+        ng-repeat="(cIndex, collection) in collections">
+
+        <div class="background-full" 
+          on-double-tap="openZoom(backgrounds[cIndex])"
+          on-hold="share(collection.images[0], collection.post)"
+          ng-style="{'background-image': makeCssUri(backgrounds[cIndex]) }"
+          ng-if="backgrounds[cIndex] && collection.images.length === 1">
+        </div>
+        
+        <div class="post" 
+          on-hold="share(collection.images[0], collection.post)"
+          ng-if="collection.post && collection.images.length === 1">
           <div class="entry">
-            <p class="title" ng-bind="collection.post.title" ng-show="collection.post.title"></p>
+
+            <p class="title" 
+              ng-bind="collection.post.title" 
+              ng-show="collection.post.title">
+            </p>
+
             <p class="author clearfix">
-              <img ng-src="{{collection.post.author.icon}}" class="author-avatar" alt="">
-              <span ng-bind="collection.post.author.name" ng-class="{valign: !!!collection.images[0].exif.camera}"></span>
-              <span class="camera" ng-show="collection.images[0].exif.camera">
+              <img ng-src="{{collection.post.author.icon}}" 
+                class="author-avatar" alt="" />
+
+              <span ng-bind="collection.post.author.name" 
+                ng-class="{valign: !!!collection.images[0].exif.camera}"></span>
+
+              <span class="camera" 
+                ng-show="collection.images[0].exif.camera">
                 <i class="icon ion-camera"></i>
                 <i ng-bind="collection.images[0].exif.camera.name" ></i>
               </span>
             </p>
+
+            <div class="pager">1/1</div>
           </div>
         </div>
-      </ion-slide>
-    </ion-slide-box>
-  </ion-content>
+
+        <!-- collection children -->
+        <div class="swiper-container swiper-container-children"
+          ng-if="collection.images.length > 1" id="children-{{cIndex}}">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide" 
+              on-hold="share(image, collection.post)"
+              on-double-tap="openZoom(childrens[cIndex][$index])"
+              ng-repeat="image in collection.images">
+
+              <div class="background-full" 
+                ng-style="{'background-image': makeCssUri(childrens[cIndex][$index]) }">
+              </div>
+
+              <div class="post">
+                <div class="entry">
+
+                  <p class="title" 
+                    ng-if="$index == 0"
+                    ng-bind="collection.post.title" 
+                    ng-show="collection.post.title">
+                  </p>
+
+                  <p class="author clearfix" ng-if="$index == 0">
+                    <img ng-src="{{collection.post.author.icon}}" 
+                      class="author-avatar" alt="" />
+
+                    <span ng-bind="collection.post.author.name" 
+                      ng-class="{valign: !!!image.exif.camera}"></span>
+
+                    <span class="camera" 
+                      ng-show="image.exif.camera">
+                      <i class="icon ion-camera"></i>
+                      <i ng-bind="image.exif.camera.name" ></i>
+                    </span>
+                  </p>
+
+                  <p class="camera post-single" 
+                    ng-if="$index > 0"
+                    ng-show="image.exif.camera && image.exif.camera.name">
+                    <i class="icon ion-camera"></i>
+                    <i ng-bind="image.exif.camera.name"></i>
+                  </p>
+                  <p class="exif post-single" 
+                    ng-if="$index > 0"
+                    ng-show="image.exif.exposure">
+                    <i class="icon ion-qr-scanner"></i>
+                    <i ng-bind="image.exif.exposure"></i>
+                  </p>
+                  <p class="lens post-single" 
+                    ng-if="$index > 0"
+                    ng-show="image.exif.lens && image.exif.lens.name">
+                    <i class="icon ion-aperture"></i>
+                    <i ng-bind="image.exif.lens.name | limitTo: 26"></i>
+                  </p>
+
+                  <p class="post-single"
+                    style="padding-right: 80px;" 
+                    ng-if="$index > 0 && collection.post.excerpt"
+                    ng-show="!image.exif.camera && !image.exif.exposure && !image.exif.lens">
+                    <i ng-bind="collection.post.excerpt | limitTo: 40"></i>
+                  </p>
+
+                  <div class="pager" ng-bind="($index + 1) + '/' + collection.images.length"></div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script id="zoom-modal" type="text/ng-template">
+    <ion-scroll 
+      zooming="true" 
+      direction="xy" 
+      max-zoom="1"
+      scrollbar-x="false"
+      scrollbar-y="false"
+      class="zoom-wrapper">
+      <img ng-src="{{ zoomImage }}" 
+        class="zoom-image"
+        on-double-tap="hideZoom()" />
+    </ion-scroll>
+  </script>
+
 </ion-view>

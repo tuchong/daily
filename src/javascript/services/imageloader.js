@@ -1,93 +1,49 @@
-;(function(angular, debug) {
+;(function(window) {
   'use strict';
-  var log;
 
-  if (!angular)
-    throw new Error('Angular.js is required');
-  if (debug)
-    log = debug('tuchong-daily:ImageLoader');
+  var angular = window.angular;
+  var ImageLoader = window.ImageLoader;
+  var ismobile = window.navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(android)|(webOS)/i);
 
   angular
     .module('tuchong-daily')
     .service('imageLoader', [
-      'UI',
+      '$ionicLoading',
       '$timeout',
       imageLoader
     ]);
 
-  function imageLoader(UI, $timeout) {
-    var self = this;
-    this.load = loadBackground;
-    this.loadCache = loadCache;
-    this.cache = {};
+  function imageLoader($ionicLoading, $timeout) {
+    this.load = load;
 
-    function loadCache(type) {
-      if (!self.cache[type])
-        return [];
-      return self.cache[type];
-    }
+    function load(uri, callback) {
+      $ionicLoading.show();
 
-    // 应该将逻辑统一化
-    function loadBackground(index, scope, type, id) {
-      if (index === undefined || index === null || isNaN(index)) 
-        return;
+      var img = new BlobImage(ismobile ? uri : proxy(uri));
+      img.element.onload = success;
+      img.element.onerror = fail;
 
-      if (scope.backgrounds[index]) {
-        if (log) 
-          log('Reading image from cache');
-        if (!scope.slidesReady) 
-          scope.slidesReady = true;
-
-        return UI.loading.hide();
+      function success() {
+        $ionicLoading.hide();
+        callback(img.blobURL);
+        img = null;
       }
 
-      if (!scope.collections && !scope.images) {
-        UI.loading
-          .show('图片加载失败，请稍后再试试..');
+      function fail() {
+        $ionicLoading.show({
+          template: '图片加载失败，请稍后再试试...'
+        });
+        img = null;
 
-        $timeout(UI.loading.hide, 400);
-
-        return;
+        $timeout($ionicLoading.hide, 1000);
       }
 
-      UI.loading
-        .show('<i class="icon ion-loading-c"></i> 图片加载中...');
-
-      var image = type === 'home' ?
-        scope.collections[index].images[0].uri :
-        scope.images[index].uri ;
-
-      loadImage(image, loadDone, loadError);
-
-      function loadDone() {
-        if (log) log('Image loaded: %s', image + '.jpg');
-
-        scope.backgrounds[index] = image;
-        scope.$apply();
-
-        if (!scope.slidesReady)
-          scope.slidesReady = true;
-
-        // Update the whole cache
-        var cacheKey = type === 'home' ? type : id;
-        self.cache[cacheKey] = scope.backgrounds;
-
-        UI.loading.hide();
+      function proxy(realuri) {
+        return realuri.replace(
+          'http://photos.tuchong.com', 
+          'http://localhost:8100/photos'
+        );
       }
-
-      function loadError() {
-        UI.loading
-          .show('图片加载失败，请稍后再试试...');
-      }
-    }
-
-    function loadImage(uri, callback, onerror) {
-      var img = new Image();
-      img.onload = callback;
-      img.onerror = onerror;
-      img.src = uri + '.jpg';
-      img = null;
     }
   }
-
-})(window.angular, window.debug);
+})(this);

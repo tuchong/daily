@@ -1,38 +1,31 @@
-;(function(angular, debug) {
+;(function(window) {
   'use strict';
-  var log;
 
-  if (!angular)
-    throw new Error('Angular.js is required');
-  if (debug)
-    log = debug('tuchong-daily:Share');
+  var angular = window.angular;
 
   angular
     .module('tuchong-daily')
     .service('share', [
       '$ionicLoading',
       '$ionicActionSheet',
-      ctrlerUI
+      share
     ]);
 
-  function ctrlerUI($ionicLoading, $ionicActionSheet) {
+  function share($ionicLoading, $ionicActionSheet) {
     this.popup = showPopup;
 
     function showPopup(image, post) {
       var sheet = {};
-
-      sheet.buttons = [];
-      sheet.buttons.push({
+      sheet.titleText = '与朋友们分享好图';
+      sheet.cancelText = '算了';
+      sheet.buttonClicked = buttonClicked;
+      sheet.buttons = [{
         text: '<i class="icon ion-at"></i> 分享给微信小伙伴'
       }, {
         text: '<i class="icon ion-chatbubbles"></i> 分享到微信朋友圈' 
       }, {
         text: '<i class="icon ion-star"></i> 添加到微信收藏夹' 
-      });
-
-      sheet.titleText = '与朋友们分享好图';
-      sheet.cancelText = '算了';
-      sheet.buttonClicked = buttonClicked;
+      }];
 
       $ionicActionSheet.show(sheet);
 
@@ -62,13 +55,9 @@
            }
          },
          scene: index
-        }, function() {
-          if (log) log('Shared !');
-        }, function(err) {
-          if (log) log(err);
         });
       }
     }
   }
 
-})(window.angular, window.debug);
+})(this);

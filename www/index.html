@@ -6,26 +6,34 @@
     <title></title>
     <!-- styles -->
     <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="lib/swiper/dist/css/swiper.min.css" rel="stylesheet">
     <link href="dist/css/app.min.css" rel="stylesheet">
-    <!-- for debug -->
-    <script src="lib/debug/dist/debug.js"></script>
     <!-- development deps -->
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="lib/angular-resource/angular-resource.min.js"></script>
     <script src="lib/avoscloud/dist/avoscloud.min.js"></script>
+    <script src="lib/swiper/dist/js/swiper.min.js"></script>
+    <script src="lib/mindb/min.min.js"></script>
+    <script src="lib/blobimage/blobimage.js"></script>
+    <script src="lib/blobimage/manager.js"></script>
     <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <script src="cordova.js"></script>
     <!-- app -->
     <script src="configs.js"></script>
     <script src="dist/javascript/tuchong.min.js"></script>
   </head>
-  <body ng-app="tuchong-daily" animation="slide-left-right-ios7" class="tuchong-daily">
+  <body ng-app="tuchong-daily" 
+    animation="slide-left-right-ios7" 
+    class="tuchong-daily">
+    
     <!-- nav -->
     <ion-nav-bar class="bar-positive nav-title-slide-ios7 daily-header">
-      <ion-nav-back-button class="button-icon icon ion-arrow-return-left">
-      </ion-nav-back-button>
+      <!-- <ion-nav-back-button class="button-icon icon ion-arrow-return-left">
+      </ion-nav-back-button> -->
     </ion-nav-bar>
+
     <!-- content -->
-    <ion-nav-view class="tuchong-daily-view background"></ion-nav-view>
+    <ion-nav-view class="tuchong-daily-view background">
+    </ion-nav-view>
   </body>
 </html>

@@ -1,121 +1,219 @@
-;(function(angular, debug, localStorage) {
+;(function(window) {
   'use strict';
-  var log;
 
-  if (!angular)
-    throw new Error('Angular.js is required');
-  if (debug)
-    log = debug('tuchong-daily:Controller:Home');
+  var angular = window.angular;
 
   angular
     .module('tuchong-daily')
     .controller('home', [
       '$scope',
-      '$state',
       'Store',
-      'UI',
-      '$ionicSlideBoxDelegate',
+      '$ionicLoading',
       '$timeout',
-      '$rootScope',
       'imageLoader',
-      '$cordovaDialogs',
       'share',
+      '$ionicModal',
+      '$rootScope',
+      '$cordovaDialogs',
       home
     ]);
 
-  function home(scope, $state, Store, UI, $ionicSlideBoxDelegate, $timeout, $rootScope, imageLoader, $cordovaDialogs, share) {
-    scope.go = go;
-    scope.share = share.popup;
-    scope.updateSlides = updateSlides;
-    scope.backgrounds = imageLoader.loadCache('home');
+  function home(scope, Store, $ionicLoading, $timeout, imageLoader, share, $ionicModal, $rootScope, $cordovaDialogs) {
+    // When Push Received,
+    // Render this notified post as first post.
+    $rootScope.$on('pushNotificationReceived', pushNotificationReceived);
 
-    // Show loading message
-    UI.loading.show('<i class="icon ion-refreshing"></i> 努力加载中...');
+    scope.share = share.popup;
+    scope.makeCssUri = makeCssUri;
+    scope.openZoom = openZoom;
+    scope.hideZoom = hideZoom;
+
+    var slides = null;
+    var childrenSlides = {};
+
+    var backgrounds = scope.backgrounds = [];
+    var childrens = scope.childrens = {};
+
+    // Show loading
+    $ionicLoading.show();
 
     // Read local cache from localStorage
     if (Store.cache.collections)
       return setup(Store.cache.collections);
 
-    fetchFresh();
+    // Open a request
+    fetch();
 
     // Fetch fresh data from API server
-    function fetchFresh(callback) {
-      Store.hot.get({}, success, fail);
+    function fetch(id) {
+      var query = {};
+      
+      if (id)
+        query.postId = id;
 
-      function success(data){
+      Store[id ? 'post' : 'hot'].get(query, success, fail);
+
+      function success(data) {
+        if (id) {
+          data.postId = id;
+          return setup([data]);
+        }
+
         if (!data.collections)
-          return UI.loading.show('<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试');
-
-        if (log)
-          log('Reading fresh collections (%s)', data.collections.length);
+          return fail();
 
         // Setup a few slides
-        setup(data.collections, true);
-        // Save all data to cache
-        Store.save('collections', data.collections);
+        setup(data.collections);
 
-        if (callback)
-          callback();
+        // Save all data to cache
+        Store.save('collections', data);
       }
 
-      function fail(err){
-        UI.loading
-          .show('<i class="icon ion-close-circled"></i> 网络连接失败...请稍后再试');
-
-        if (callback)
-          callback();
+      function fail(err) {
+        $ionicLoading.show({
+          template: '<i class="icon ion-ios-close-outline"></i> 网络连接失败...请稍后再试'
+        });
+        return false;
       }
     }
 
-    // Init a slides with 3 slides,
-    // If collection's pictures is above 3.
-    function setup(collections, fresh) {
-      var lastIndex = localStorage.lastSlideIndexHome;
-      var inValid = !lastIndex || parseInt(lastIndex) <= 3;
-      // Lazy loading slides with a center point
-      scope.collections = fresh ? 
-        angular.copy(collections).splice(0, 3) :
-        angular.copy(collections).splice(0, inValid ? 3 : parseInt(lastIndex) + 1);
+    // Setup slides view
+    function setup(data) {
+      var rendered = scope.collections && scope.collections.length > 0;
 
-      // Lazy loading the first slide's backgroud-image
-      imageLoader.load(0, scope, 'home');
-      
-      $ionicSlideBoxDelegate.update();
+      scope.collections = rendered ?
+        scope.collections.concat(data) : 
+        data;
+
+      // Show befor init slides
+      if (!scope.slidesReady)
+        scope.slidesReady = true;
+
+      // Hide loading
+      $ionicLoading.hide();
+
+      var defaultIndex = rendered && data.length === 1 ? 
+        findIndex(data[0].postId, scope.collections) :
+        0;
+
+      // Lazy load the first slide's backgroud image
+      // Or selected slide's backgroud
+      if (scope.collections[defaultIndex].images.length === 1) {
+        loadImage(defaultIndex);
+      } else {
+        // Or its children
+        loadChildImage(defaultIndex, 0);
+        $timeout(function() {
+          setupChildrenSwiper(defaultIndex);
+        }, 10);
+      }
+
+      // Init the slides on next tick
+      $timeout(function() {
+        if (rendered && slides) {
+          slides.updateSlidesSize();
+
+          if (defaultIndex !== 0)
+            slides.slideTo(defaultIndex);
+
+          return;
+        }
+
+        slides = new Swiper('.swiper-container-collection', {
+          onSlideChangeStart: function() {
+            var index = slides.activeIndex;
+            loadImage(index);
+
+            if (scope.collections[index].images.length > 1 && 'undefined' === typeof(childrenSlides[index])) {
+              (function(ii) {
+                setupChildrenSwiper(ii);
+
+                loadChildImage(ii, 0);
+              })(index);
+            }
+          }
+        });
+      }, 10);
+    }
+
+    function findIndex(id, arr) {
+      var target;
+      angular.forEach(arr, function(item, index){
+        if (item.postId === id)
+          target = index;
+      });
+      return target;
+    }
+
+    function setupChildrenSwiper(index) {
+      childrenSlides[index] = new Swiper('#children-' + index, {
+        direction: 'vertical',
+        onSlideChangeStart: function() {
+          loadChildImage(index, childrenSlides[index].activeIndex);
+        }
+      });
     }
 
     // Update slides async
-    function updateSlides(index) {
-      if (isNaN(index)) index = 0;
+    function loadImage(index) {
+      if (backgrounds[index])
+        return scope.$apply();
 
-      if (log) log('Switching to slide: [%s]', index);
-
-      // Loading this slide's backgroud-image
-      imageLoader.load(index, scope, 'home');
-
-      // Load the next slides
-      if (!scope.collections[index + 1] && Store.cache.collections[index + 1])
-        scope.collections.push(Store.cache.collections[index + 1]);
-
-      // Update the latest index of home slides
-      localStorage.lastSlideIndexHome = index;
-
-      if (log) log('Set lastSlideIndexHome to %s', index);
-
-      $ionicSlideBoxDelegate.update();
+      imageLoader.load(
+        scope.collections[index].images[0].uri + '.jpg',
+        function(localImage) {
+          scope.backgrounds[index] = localImage;
+          scope.$apply();
+        }
+      );
     }
 
-    // Go to the target state
-    function go(id, imagesLength) {
-      var isValidCollection = imagesLength > 1;
+    function loadChildImage(parentIndex, index) {
+      if (Array.isArray(scope.childrens[parentIndex]) && scope.childrens[parentIndex][index])
+        return scope.$apply();
 
-      if (isValidCollection)
-        return $state.go('collection', {id: id});
+      if (!Array.isArray(scope.childrens[parentIndex]))
+        scope.childrens[parentIndex] = [];
 
-      UI.loading
-        .show('<i class="icon ion-information-circled"></i> 这个相册只有一张图');
+      imageLoader.load(
+        scope.collections[parentIndex].images[index].uri + '.jpg',
+        function(localImage) {
+          scope.childrens[parentIndex][index] = localImage;
+          scope.$apply();
+        }
+      );
+    }
 
-      $timeout(UI.loading.hide, 400);
+    function openZoom(uri) {
+      scope.zoomImage = uri;
+
+      $ionicLoading.show({
+        scope: scope,
+        templateUrl: 'zoom-modal',
+        hideOnStateChange: true
+      });
+    }
+
+    function hideZoom() {
+      $ionicLoading.hide();
+    }
+
+    function makeCssUri(str) {
+      if (!str)
+        return 'none';
+
+      return 'url(' + str + ')';
+    }
+
+    function pushNotificationReceived(event, notification) {
+      if (notification.collectionId) 
+        return fetch(notification.collectionId);
+
+      $cordovaDialogs.alert(
+        notification.alert, // message
+        '收到通知', // title,
+        '知道了' // button
+      )
     }
   }
-
-})(window.angular, window.debug, window.localStorage);
+})(this);
