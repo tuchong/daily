@@ -13,10 +13,16 @@
       'imageLoader',
       'share',
       '$ionicModal',
+      '$rootScope',
+      '$cordovaDialogs',
       home
     ]);
 
-  function home(scope, Store, $ionicLoading, $timeout, imageLoader, share, $ionicModal) {
+  function home(scope, Store, $ionicLoading, $timeout, imageLoader, share, $ionicModal, $rootScope, $cordovaDialogs) {
+    // When Push Received,
+    // Render this notified post as first post.
+    $rootScope.$on('pushNotificationReceived', pushNotificationReceived);
+
     scope.share = share.popup;
     scope.makeCssUri = makeCssUri;
     scope.openZoom = openZoom;
@@ -39,10 +45,17 @@
     fetch();
 
     // Fetch fresh data from API server
-    function fetch() {
-      Store.hot.get({}, success, fail);
+    function fetch(id) {
+      var query = {};
+      
+      if (id)
+        query.postId = id;
+
+      Store[id ? 'post' : 'hot'].get(query, success, fail);
 
       function success(data) {
+        if (id)
+          return setup([data]);
         if (!data.collections)
           return fail();
 
@@ -63,7 +76,10 @@
 
     // Setup slides view
     function setup(data) {
-      scope.collections = data;
+      if (!scope.collections)
+        scope.collections = data;
+      else
+        scope.collections = data.concat(scope.collections);
 
       // Show befor init slides
       if (!scope.slidesReady)
@@ -76,6 +92,7 @@
       if (scope.collections[0].images.length === 1) {
         loadImage(0);
       } else {
+        // Or its children
         loadChildImage(0, 0);
         $timeout(function() {
           setupChildrenSwiper(0);
@@ -159,6 +176,17 @@
         return 'none';
 
       return 'url(' + str + ')';
+    }
+
+    function pushNotificationReceived(event, notification) {
+      if (notification.collectionId) 
+        return fetch(notification.collectionId);
+
+      $cordovaDialogs.alert(
+        notification.alert, // message
+        '收到通知', // title,
+        '知道了' // button
+      )
     }
   }
 })(this);

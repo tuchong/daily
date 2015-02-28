@@ -32,16 +32,11 @@
       '$timeout',
       'avoscloud',
       '$cordovaDialogs',
-      '$rootScope',
       '$state',
       init
     ]);
 
-  function init($ionicPlatform, $cordovaDevice, $cordovaNetwork, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $rootScope, $state) {
-    // When Push Received,
-    // Render this notified post as first post.
-    $rootScope.$on('pushNotificationReceived', pushNotificationReceived);
-
+  function init($ionicPlatform, $cordovaDevice, $cordovaNetwork, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $state) {
     $ionicPlatform.ready(function() {
       var device = $cordovaDevice.getDevice();
       var newtork = $cordovaNetwork.getNetwork();
@@ -115,16 +110,6 @@
           '知道了' // button
         )
       }
-    }
-
-    function pushNotificationReceived(event, notification) {
-      var cId = notification.collectionId;
-
-      $cordovaDialogs.alert(
-        notification.alert, // message
-        '收到通知', // title,
-        '知道了' // button
-      )
     }
   }
 
