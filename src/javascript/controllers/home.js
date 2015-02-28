@@ -2,13 +2,11 @@
   'use strict';
 
   var angular = window.angular;
-  var localStorage = window.localStorage;
 
   angular
     .module('tuchong-daily')
     .controller('home', [
       '$scope',
-      '$state',
       'Store',
       '$ionicLoading',
       '$timeout',
@@ -18,7 +16,7 @@
       home
     ]);
 
-  function home(scope, $state, Store, $ionicLoading, $timeout, imageLoader, share, $ionicModal) {
+  function home(scope, Store, $ionicLoading, $timeout, imageLoader, share, $ionicModal) {
     scope.share = share.popup;
     scope.makeCssUri = makeCssUri;
     scope.openZoom = openZoom;
@@ -37,6 +35,7 @@
     if (Store.cache.collections)
       return setup(Store.cache.collections);
 
+    // Open a request
     fetch();
 
     // Fetch fresh data from API server
@@ -49,8 +48,9 @@
 
         // Setup a few slides
         setup(data.collections);
+
         // Save all data to cache
-        Store.save('collections', data.collections);
+        Store.save('collections', data);
       }
 
       function fail(err) {
@@ -61,6 +61,7 @@
       }
     }
 
+    // Setup slides view
     function setup(data) {
       scope.collections = data;
 
@@ -127,9 +128,8 @@
       if (Array.isArray(scope.childrens[parentIndex]) && scope.childrens[parentIndex][index])
         return;
 
-      if (!Array.isArray(scope.childrens[parentIndex])) {
+      if (!Array.isArray(scope.childrens[parentIndex]))
         scope.childrens[parentIndex] = [];
-      }
 
       imageLoader.load(
         scope.collections[parentIndex].images[index].uri + '.jpg',
@@ -157,7 +157,7 @@
     function makeCssUri(str) {
       if (!str)
         return 'none';
-      
+
       return 'url(' + str + ')';
     }
   }
