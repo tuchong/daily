@@ -32,13 +32,12 @@
       '$timeout',
       'avoscloud',
       '$cordovaDialogs',
-      '$ionicSlideBoxDelegate',
       '$rootScope',
       '$state',
       init
     ]);
 
-  function init($ionicPlatform, $cordovaDevice, $cordovaNetwork, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $ionicSlideBoxDelegate, $rootScope, $state) {
+  function init($ionicPlatform, $cordovaDevice, $cordovaNetwork, $cordovaPush, $timeout, avoscloud, $cordovaDialogs, $rootScope, $state) {
     // Clear reading history
     if (localStorage.lastSlideIndexHome) 
       localStorage.removeItem('lastSlideIndexHome');
@@ -160,11 +159,6 @@
         gotoIndex = 0;
 
       gotoIndex = parseInt(gotoIndex);
-
-      // Slide to last visited index.
-      $timeout(function(){
-        $ionicSlideBoxDelegate.slide(gotoIndex);
-      }, 300);
     }
   }
 
