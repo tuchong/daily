@@ -118,8 +118,9 @@
 
         slides = new Swiper('.swiper-container-collection', {
           onSlideChangeStart: function() {
-            loadCover(slides.activeIndex, { 
-              setupChildrenSwiper: true 
+            loadCover(slides.activeIndex + 1, { 
+              setupChildrenSwiper: true,
+              loadFirstChild: true
             });
           }
         });
@@ -132,8 +133,11 @@
       if (scope.collections[index].images.length === 1) 
         return loadImage(index);
 
-      // Else, load its first child
       loadChildImage(index, 0);
+
+      // Load its first child if required
+      if (opts && opts.loadFirstChild)
+        loadChildImage(index, 1);
 
       if (!opts || !opts.setupChildrenSwiper)
         return;
@@ -161,6 +165,7 @@
         direction: 'vertical',
         onSlideChangeStart: function() {
           loadChildImage(index, childrenSlides[index].activeIndex);
+          loadChildImage(index, childrenSlides[index].activeIndex + 1);
         }
       });
     }
@@ -169,6 +174,9 @@
     function loadImage(index) {
       if (backgrounds[index])
         return scope.$apply();
+
+      if (!scope.collections[index])
+        return;
 
       imageLoader.load(
         scope.collections[index].images[0].uri + '.jpg',
@@ -185,6 +193,12 @@
 
       if (!Array.isArray(scope.childrens[parentIndex]))
         scope.childrens[parentIndex] = [];
+
+      if (!scope.collections[parentIndex])
+        return;
+
+      if (!scope.collections[parentIndex].images[index])
+        return;
 
       imageLoader.load(
         scope.collections[parentIndex].images[index].uri + '.jpg',
