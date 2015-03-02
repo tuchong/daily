@@ -98,7 +98,8 @@
 
       // Load cover image
       loadCover(targetIndex, { 
-        setupChildrenSwiper: true 
+        setupChildrenSwiper: true,
+        loadFirstChild: true
       });
 
       if (targetIndex === 0)
