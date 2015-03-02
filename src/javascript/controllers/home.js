@@ -92,47 +92,63 @@
       // Hide loading
       $ionicLoading.hide();
 
-      var defaultIndex = rendered && data.length === 1 ? 
+      var targetIndex = rendered && data.length === 1 ? 
         findIndex(data[0].postId, scope.collections) :
         0;
 
-      // Lazy load the first slide's backgroud image
-      // Or selected slide's backgroud
-      if (scope.collections[defaultIndex].images.length === 1) {
-        loadImage(defaultIndex);
-      } else {
-        // Or its children
-        loadChildImage(defaultIndex, 0);
-        $timeout(function() {
-          setupChildrenSwiper(defaultIndex);
-        }, 10);
-      }
+      // Load cover image
+      loadCover(targetIndex, { 
+        setupChildrenSwiper: true,
+        loadFirstChild: true
+      });
+
+      if (targetIndex === 0)
+        loadCover(1);
 
       // Init the slides on next tick
       $timeout(function() {
+        // When Push Received
         if (rendered && slides) {
           slides.updateSlidesSize();
 
-          if (defaultIndex !== 0)
-            slides.slideTo(defaultIndex);
+          if (targetIndex !== 0)
+            slides.slideTo(targetIndex);
 
           return;
         }
 
         slides = new Swiper('.swiper-container-collection', {
           onSlideChangeStart: function() {
-            var index = slides.activeIndex;
-            loadImage(index);
-
-            if (scope.collections[index].images.length > 1 && 'undefined' === typeof(childrenSlides[index])) {
-              (function(ii) {
-                setupChildrenSwiper(ii);
-
-                loadChildImage(ii, 0);
-              })(index);
-            }
+            loadCover(slides.activeIndex + 1, { 
+              setupChildrenSwiper: true,
+              loadFirstChild: true
+            });
           }
         });
+      }, 10);
+    }
+
+    // Lazy loading the cover image of a slide
+    function loadCover(index, opts) {
+      // If this collection have on one picture
+      if (scope.collections[index].images.length === 1) 
+        return loadImage(index);
+
+      loadChildImage(index, 0);
+
+      // Load its first child if required
+      if (opts && opts.loadFirstChild)
+        loadChildImage(index, 1);
+
+      if (!opts || !opts.setupChildrenSwiper)
+        return;
+
+      if ('undefined' !== typeof(childrenSlides[index]))
+        return;
+
+      // Then setup its children slides
+      $timeout(function() {
+        setupChildrenSwiper(index);
       }, 10);
     }
 
@@ -149,7 +165,7 @@
       childrenSlides[index] = new Swiper('#children-' + index, {
         direction: 'vertical',
         onSlideChangeStart: function() {
-          loadChildImage(index, childrenSlides[index].activeIndex);
+          loadChildImage(index, childrenSlides[index].activeIndex + 1);
         }
       });
     }
@@ -158,6 +174,9 @@
     function loadImage(index) {
       if (backgrounds[index])
         return scope.$apply();
+
+      if (!scope.collections[index])
+        index -= 1;
 
       imageLoader.load(
         scope.collections[index].images[0].uri + '.jpg',
@@ -174,6 +193,12 @@
 
       if (!Array.isArray(scope.childrens[parentIndex]))
         scope.childrens[parentIndex] = [];
+
+      if (!scope.collections[parentIndex])
+        return;
+
+      if (!scope.collections[parentIndex].images[index])
+        return;
 
       imageLoader.load(
         scope.collections[parentIndex].images[index].uri + '.jpg',
