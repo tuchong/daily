@@ -119,10 +119,11 @@
 
         slides = new Swiper('.swiper-container-collection', {
           onSlideChangeStart: function() {
-            loadCover(slides.activeIndex + 1, { 
+            loadCover(slides.activeIndex, { 
               setupChildrenSwiper: true,
               loadFirstChild: true
             });
+            loadCover(slides.activeIndex + 1);
           }
         });
       }, 10);
@@ -130,6 +131,9 @@
 
     // Lazy loading the cover image of a slide
     function loadCover(index, opts) {
+      if (!scope.collections[index])
+        index -= 1;
+
       // If this collection have on one picture
       if (scope.collections[index].images.length === 1) 
         return loadImage(index);
@@ -175,24 +179,21 @@
       if (backgrounds[index])
         return scope.$apply();
 
-      if (!scope.collections[index])
-        index -= 1;
-
       imageLoader.load(
         scope.collections[index].images[0].uri + '.jpg',
         function(localImage) {
-          scope.backgrounds[index] = localImage;
+          backgrounds[index] = localImage;
           scope.$apply();
         }
       );
     }
 
     function loadChildImage(parentIndex, index) {
-      if (Array.isArray(scope.childrens[parentIndex]) && scope.childrens[parentIndex][index])
+      if (Array.isArray(childrens[parentIndex]) && childrens[parentIndex][index])
         return scope.$apply();
 
-      if (!Array.isArray(scope.childrens[parentIndex]))
-        scope.childrens[parentIndex] = [];
+      if (!Array.isArray(childrens[parentIndex]))
+        childrens[parentIndex] = [];
 
       if (!scope.collections[parentIndex])
         return;
@@ -203,7 +204,7 @@
       imageLoader.load(
         scope.collections[parentIndex].images[index].uri + '.jpg',
         function(localImage) {
-          scope.childrens[parentIndex][index] = localImage;
+          childrens[parentIndex][index] = localImage;
           scope.$apply();
         }
       );
