@@ -164,7 +164,6 @@
       childrenSlides[index] = new Swiper('#children-' + index, {
         direction: 'vertical',
         onSlideChangeStart: function() {
-          loadChildImage(index, childrenSlides[index].activeIndex);
           loadChildImage(index, childrenSlides[index].activeIndex + 1);
         }
       });
@@ -176,7 +175,7 @@
         return scope.$apply();
 
       if (!scope.collections[index])
-        return;
+        index -= 1;
 
       imageLoader.load(
         scope.collections[index].images[0].uri + '.jpg',
