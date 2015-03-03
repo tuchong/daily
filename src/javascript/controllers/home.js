@@ -98,6 +98,7 @@
 
       // Load cover image
       loadCover(targetIndex, { 
+        showLoading: true,
         setupChildrenSwiper: true,
         loadFirstChild: true
       });
@@ -120,10 +121,13 @@
         slides = new Swiper('.swiper-container-collection', {
           onSlideChangeStart: function() {
             loadCover(slides.activeIndex, { 
+              showLoading: true,
               setupChildrenSwiper: true,
               loadFirstChild: true
             });
-            loadCover(slides.activeIndex + 1);
+            loadCover(slides.activeIndex + 1, {
+              showLoading: false
+            });
           }
         });
       }, 10);
@@ -136,13 +140,13 @@
 
       // If this collection have on one picture
       if (scope.collections[index].images.length === 1) 
-        return loadImage(index);
+        return loadImage(index, opts);
 
-      loadChildImage(index, 0);
+      loadChildImage(index, 0, opts);
 
       // Load its first child if required
       if (opts && opts.loadFirstChild)
-        loadChildImage(index, 1);
+        loadChildImage(index, 1, opts);
 
       if (!opts || !opts.setupChildrenSwiper)
         return;
@@ -175,7 +179,7 @@
     }
 
     // Update slides async
-    function loadImage(index) {
+    function loadImage(index, opts) {
       if (backgrounds[index])
         return scope.$apply();
 
@@ -184,11 +188,12 @@
         function(localImage) {
           backgrounds[index] = localImage;
           scope.$apply();
-        }
+        },
+        (opts && opts.showLoading) || true
       );
     }
 
-    function loadChildImage(parentIndex, index) {
+    function loadChildImage(parentIndex, index, opts) {
       if (Array.isArray(childrens[parentIndex]) && childrens[parentIndex][index])
         return scope.$apply();
 
@@ -206,7 +211,9 @@
         function(localImage) {
           childrens[parentIndex][index] = localImage;
           scope.$apply();
-        }
+        },
+        // Do not show loading when loading next child slide
+        (opts && opts.showLoading) || index === 0 
       );
     }
 
