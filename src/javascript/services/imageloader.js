@@ -16,8 +16,9 @@
   function imageLoader($ionicLoading, $timeout) {
     this.load = load;
 
-    function load(uri, callback) {
-      $ionicLoading.show();
+    function load(uri, callback, showloading) {
+      if (showloading)
+        $ionicLoading.show();
 
       var img = new BlobImage(ismobile ? uri : proxy(uri));
       img.element.onload = success;
