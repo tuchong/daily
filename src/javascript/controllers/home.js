@@ -125,9 +125,6 @@
               setupChildrenSwiper: true,
               loadFirstChild: true
             });
-            loadCover(slides.activeIndex + 1, {
-              showLoading: false
-            });
           }
         });
       }, 10);
@@ -173,7 +170,7 @@
       childrenSlides[index] = new Swiper('#children-' + index, {
         direction: 'vertical',
         onSlideChangeStart: function() {
-          loadChildImage(index, childrenSlides[index].activeIndex + 1);
+          loadChildImage(index, childrenSlides[index].activeIndex);
         }
       });
     }
@@ -212,8 +209,8 @@
           childrens[parentIndex][index] = localImage;
           scope.$apply();
         },
-        // Do not show loading when loading next child slide
-        (opts && opts.showLoading) || index === 0 
+        // ALWAYS show loading
+        (opts && opts.showLoading) || true
       );
     }
 
