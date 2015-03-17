@@ -9,10 +9,10 @@
         ng-repeat="(cIndex, collection) in collections">
 
         <div class="background-full" 
-          on-double-tap="openZoom(backgrounds[cIndex])"
+          on-double-tap="openZoom(collection.images[0].uri + '.jpg')"
           on-hold="share(collection.images[0], collection.post)"
-          ng-style="{'background-image': makeCssUri(backgrounds[cIndex]) }"
-          ng-if="backgrounds[cIndex] && collection.images.length === 1">
+          ng-style="{'background-image': makeCssUri(collection.images[0].uri + '.jpg') }"
+          ng-if="collection.images[0] && collection.images.length === 1">
         </div>
         
         <div class="post" 

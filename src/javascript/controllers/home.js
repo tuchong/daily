@@ -137,7 +137,7 @@
 
       // If this collection have on one picture
       if (scope.collections[index].images.length === 1) 
-        return loadImage(index, opts);
+        return;
 
       loadChildImage(index, 0, opts);
 
