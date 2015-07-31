@@ -12,7 +12,8 @@
 @interface MXMainView : UIView<MXPostViewDelegate,UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (retain,nonatomic,readwrite) NSMutableArray *collections;
--(id)initWithFrame:(CGRect)frame stuff:(NSMutableArray *)collections;
+-(void)stuff:(NSMutableArray *)collections;
 @property (retain,nonatomic,readwrite) NSMutableArray *positions;
+@property (retain,nonatomic,readwrite) UICollectionView *collectionView;
 @property int index;
 @end

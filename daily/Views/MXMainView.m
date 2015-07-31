@@ -11,21 +11,25 @@
 
 @implementation MXMainView
 
--(id)initWithFrame:(CGRect)frame stuff:(NSMutableArray *)collections{
+-(id)initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     
     if(self){
-        self.collections = collections;
         self.positions = [[NSMutableArray alloc] init];
-        
-        for(int i=0; i<self.collections.count; i++){
-            [self.positions addObject:@"0"];
-        }
-        
         [self setupInitView];
     }
     
     return self;
+}
+
+-(void)stuff:(NSMutableArray *)collections{
+    self.collections = collections;
+    
+    for(int i=0; i<self.collections.count; i++){
+        [self.positions addObject:@"0"];
+    }
+    
+    [self.collectionView reloadData];
 }
 
 -(void)setupInitView {
@@ -35,14 +39,14 @@
     flow.minimumLineSpacing = 0;
     flow.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     
-    UICollectionView *view = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight) collectionViewLayout:flow];
-    view.delegate = self;
-    view.dataSource = self;
-    view.backgroundColor = [UIColor clearColor];
-    view.pagingEnabled = YES;
-    view.showsHorizontalScrollIndicator = NO;
-    [view registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"maincell"];
-    [self addSubview:view];
+    self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, ScreenHeight) collectionViewLayout:flow];
+    self.collectionView.delegate = self;
+    self.collectionView.dataSource = self;
+    self.collectionView.backgroundColor = [UIColor clearColor];
+    self.collectionView.pagingEnabled = YES;
+    self.collectionView.showsHorizontalScrollIndicator = NO;
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"maincell"];
+    [self addSubview:self.collectionView];
 }
 
 #pragma mark - UICollectionViewDataSource Delegate
@@ -60,16 +64,18 @@
 {
     UICollectionViewCell *cell = (UICollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"maincell" forIndexPath:indexPath];
     
-    self.index = (int)indexPath.row;
-    int index = [[self.positions objectAtIndex:self.index] intValue];
-    
-    MXCollectionModel *collection = [self.collections objectAtIndex:self.index];
-    MXPostView *postView = [[MXPostView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth,ScreenHeight)
-                                                       stuff:collection
-                                           lastScrollToIndex:index
-                                                    delegate:self];
-    
-    [cell.contentView addSubview:postView];
+    if( self.positions.count ){
+        self.index = (int)indexPath.row;
+        int index = [[self.positions objectAtIndex:self.index] intValue];
+        
+        MXCollectionModel *collection = [self.collections objectAtIndex:self.index];
+        MXPostView *postView = [[MXPostView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth,ScreenHeight)
+                                                           stuff:collection
+                                               lastScrollToIndex:index
+                                                        delegate:self];
+        
+        [cell.contentView addSubview:postView];
+    }
     
     return cell;
 }

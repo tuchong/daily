@@ -7,30 +7,35 @@
 //
 
 #import "MXRootViewController.h"
-#import "MXLoaderView.h"
 #import "AFNetworking.h"
 #import "Masonry.h"
 #import "MXMainView.h"
 #import "MXCollectionModel.h"
 
 @interface MXRootViewController ()
-@property (retain,nonatomic,readwrite) MXLoaderView *loaderView;
+@property (retain,nonatomic,readwrite) UIImageView *screenView;
+@property (retain,nonatomic,readwrite) MXMainView *mainView;
 @end
 
 @implementation MXRootViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    [self setupMainView];
+    [self setupScreenView];
     [self setupHeaderView];
-    [self setupLoaderView];
     [self pullData];
 }
 
-- (void)setupMainView:(NSMutableArray *)collections {
-    MXMainView *mainView = [[MXMainView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth,ScreenHeight) stuff:collections];
-    [self.view addSubview:mainView];
-    [self.view sendSubviewToBack:mainView];
+- (void)setupMainView {
+    self.mainView = [MXMainView new];
+    [self.view addSubview:self.mainView];
+    
+    [self.mainView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+        make.size.equalTo(self.view);
+    }];
 }
 
 - (void)setupHeaderView {
@@ -71,35 +76,56 @@
     }];
 }
 
-- (void)setupLoaderView {
-    self.loaderView = [MXLoaderView new];
-    [self.view addSubview:self.loaderView];
+- (void)setupScreenView {
+    self.screenView = [UIImageView new];
+    self.screenView.layer.masksToBounds = YES;
+    self.screenView.contentMode = UIViewContentModeScaleAspectFill;
+    self.screenView.alpha = 0.5;
+    [self.view addSubview:self.screenView];
     
-    [self.loaderView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.screenView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.size.equalTo(self.view);
         make.edges.equalTo(self.view);
     }];
+    
+    self.screenView.image = IMG(@"screen.jpg");
+}
+
+- (void)boarding {
+    [UIView beginAnimations:nil context:nil];
+    [UIView setAnimationDuration:6];
+    self.screenView.transform = CGAffineTransformMakeScale(1.8,1.8);
+    self.screenView.alpha = 1;
+    [UIView commitAnimations];
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
 - (void)pullData {
-    [self.loaderView show];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    [self boarding];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager.requestSerializer setValue:MXTuchongDailyToken forHTTPHeaderField:@"tuchong-daily-token"];
     [manager.requestSerializer setCachePolicy:NSURLRequestUseProtocolCachePolicy];
     [manager GET:MXTuchongDailyApiUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        
         NSMutableArray *collections = [MXCollectionModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"collections"]];
         
-        [self.loaderView dismiss];
-        [self setupMainView:collections];
+        [self.mainView stuff:collections];
+        [self.screenView.layer removeAllAnimations];
         
-        [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        [UIView animateWithDuration:1 animations:^{
+            self.screenView.alpha = 0;
+        } completion:^(BOOL finished) {
+            [self.screenView removeFromSuperview];
+            self.screenView = nil;
+        }];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"%@", error);
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     }];
-
+    
 }
 
 - (void)didReceiveMemoryWarning {
