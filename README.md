@@ -1,11 +1,12 @@
 #图虫日报
 
-##Dependency
+###Dependency
 - [AFNetworking](https://github.com/AFNetworking/AFNetworking)
+- [Masonry](https://github.com/SnapKit/Masonry)
 - [MJExtension](https://github.com/CoderMJLee/MJExtension)
 - [SDWebImage](https://github.com/rs/SDWebImage)
 
-##Platform
+###Platform
 
 Macbook Pro:
 
@@ -17,11 +18,11 @@ Xcode:
 - SDK: iOS SDK 8.4
 - Deployment Taget: 7.0
 
-##Build
+###Build
 ```bash
 cd daily
 pod install
 ```
 
-##License
+###License
 The [MIT License](LICENSE).
