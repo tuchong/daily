@@ -1,0 +1,32 @@
+//
+//  daily-Prefix.pch
+//  daily
+//
+//  Created by mufeng on 15/7/30.
+//  Copyright (c) 2015年 misery.io. All rights reserved.
+//
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import "Masonry.h"
+    #import "MJExtension.h"
+    #import <SDWebImage/UIImageView+WebCache.h>
+#endif
+
+#define AppDelegate ((MXAppDelegate *)[UIApplication sharedApplication].delegate)
+
+#pragma mark ---- RGBA color functions
+#define RGBA(c,a) [UIColor colorWithRed:((float)((c&0xFF0000)>>16))/255.0 green:((float)((c&0xFF00)>>8))/255.0 blue:((float)(c&0xFF))/255.0 alpha:a]
+
+#pragma mark ---- UIImage UIImageView functions
+#define IMG(name) [UIImage imageNamed:name]
+#define IMGF(name) [UIImage imageNamedFixed:name]
+
+#pragma mark ---- Screen width and height functions
+#define ScreenHeight ([UIScreen mainScreen].bounds.size.height)
+#define ScreenWidth ([UIScreen mainScreen].bounds.size.width)
+
+#pragma mark ---- Tuchong daily api token
+#define MXTuchongDailyApiUrl @"http://42.121.128.147:9887/daily"
+#define MXTuchongDailyToken @"YXLQ89t6G8WYd6wGaj7kFbM9c3u2kj7c"
