@@ -7,6 +7,8 @@
 
 ##Platform
 
+Macbook Pro:
+
 - OS X 10.10.4
 
 Xcode:
