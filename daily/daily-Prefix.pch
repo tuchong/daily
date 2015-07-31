@@ -28,5 +28,5 @@
 #define ScreenWidth ([UIScreen mainScreen].bounds.size.width)
 
 #pragma mark ---- Tuchong daily api token
-#define MXTuchongDailyApiUrl @"http://42.121.128.147:9887/daily"
-#define MXTuchongDailyToken @"YXLQ89t6G8WYd6wGaj7kFbM9c3u2kj7c"
+#define MXTuchongDailyApiUrl @""
+#define MXTuchongDailyToken @""
