@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MXCollectionModel.h";
+#import "MXCollectionModel.h"
 
 @interface MXShareView : UIView
 + (instancetype)initWithFrame:(CGRect)frame andCollection:(MXCollectionModel *)model;
