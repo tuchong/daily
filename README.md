@@ -5,6 +5,7 @@
 - [Masonry](https://github.com/SnapKit/Masonry)
 - [MJExtension](https://github.com/CoderMJLee/MJExtension)
 - [SDWebImage](https://github.com/rs/SDWebImage)
+- [VIPhotoView](https://github.com/vitoziv/VIPhotoView)
 
 ###Platform
 

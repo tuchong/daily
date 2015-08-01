@@ -63,7 +63,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewCell *cell = (UICollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:@"maincell" forIndexPath:indexPath];
-    
+
     if( self.positions.count ){
         self.index = (int)indexPath.row;
         int index = [[self.positions objectAtIndex:self.index] intValue];

@@ -115,7 +115,7 @@
         [self.mainView stuff:collections];
         [self.screenView.layer removeAllAnimations];
         
-        [UIView animateWithDuration:1 animations:^{
+        [UIView animateWithDuration:1.5f animations:^{
             self.screenView.alpha = 0;
         } completion:^(BOOL finished) {
             [self.screenView removeFromSuperview];
@@ -125,7 +125,7 @@
         NSLog(@"%@", error);
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     }];
-    
+
 }
 
 - (void)didReceiveMemoryWarning {

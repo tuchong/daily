@@ -10,6 +10,7 @@
 #import "Masonry.h"
 #import "MXPostModel.h"
 #import "MXImageModel.h"
+#import "VIPhotoView.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation MXPostViewCell
@@ -32,12 +33,12 @@
         }];
         
         CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-        gradientLayer.frame = CGRectMake(0,ScreenHeight-200,ScreenWidth,200);
+        gradientLayer.frame = CGRectMake(0,ScreenHeight-100,ScreenWidth,100);
         [self.imageView.layer addSublayer:gradientLayer];
         gradientLayer.startPoint = CGPointMake(0, 0);
         gradientLayer.endPoint = CGPointMake(0, 1);
         gradientLayer.colors = @[(__bridge id)[UIColor clearColor].CGColor,
-                                      (__bridge id)RGBA(0x000000,0.7).CGColor];
+                                      (__bridge id)RGBA(0x000000,0.8).CGColor];
         gradientLayer.locations = @[@(0.0f) ,@(1.0f)];
         
         self.avatarView = [UIImageView new];
@@ -89,7 +90,7 @@
         
         [self.nameView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.mas_equalTo(self.avatarView.mas_right).offset(5);
-            make.right.mas_equalTo(self.pagedView.mas_left).offset(-5);
+            make.right.mas_equalTo(self.pagedView.mas_left);
             make.bottom.mas_equalTo(self.caremaView.mas_top);
             make.height.mas_equalTo(20);
         }];
@@ -101,8 +102,9 @@
         }];
         
         [self.pagedView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(@(50));
+            //make.width.mas_equalTo(@(50));
             make.height.mas_equalTo(@(16));
+            make.left.mas_equalTo(self.caremaView.mas_right);
             make.right.equalTo(self.contentView).offset(-16);
             make.bottom.equalTo(self.contentView).offset(-16);
         }];
@@ -115,6 +117,10 @@
             make.size.equalTo(self.contentView);
             make.edges.equalTo(self.contentView);
         }];
+        
+        UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        doubleTapGesture.numberOfTapsRequired = 2;
+        [self addGestureRecognizer:doubleTapGesture];
     }
     
     return self;
@@ -138,6 +144,11 @@
     self.titleView.text = collection.post.title;
     self.nameView.text = collection.post.author;
     self.caremaView.text = imageModel.camera;
+}
+
+#pragma mark -- Double tap
+- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
+    [VIPhotoView initWithFrame:self.bounds andImage:self.imageView.image];
 }
 
 @end

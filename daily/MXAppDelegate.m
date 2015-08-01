@@ -24,6 +24,9 @@
     //Light status bar
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
+    //WeChat
+    [WXApi registerApp:MXWeChatAppId withDescription:nil];
+    
     return YES;
 }
 

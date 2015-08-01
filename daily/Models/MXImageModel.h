@@ -14,5 +14,7 @@
 @property (strong, nonatomic) NSString *lens;
 @property (strong, nonatomic) NSString *exposure;
 @property (strong, nonatomic) NSString *uri;
-@property bool status;
+@property (strong, nonatomic) NSString *uriSmall;
+@property (strong, nonatomic) NSString *width;
+@property (strong, nonatomic) NSString *height;
 @end

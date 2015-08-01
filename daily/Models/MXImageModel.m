@@ -11,7 +11,8 @@
 @implementation MXImageModel
 + (NSDictionary *)replacedKeyFromPropertyName
 {
-    return @{@"camera" : @"exif.camera.name",
+    return @{@"uriSmall": @"uri_small",
+             @"camera" : @"exif.camera.name",
              @"lens" : @"exif.lens.name",
              @"exposure" : @"exif.exposure"
              };
