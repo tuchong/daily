@@ -8,15 +8,7 @@
 
 ###Platform
 
-Macbook Pro:
-
-- OS X 10.10.4
-
-Xcode:
-
-- Version 6.4
-- SDK: iOS SDK 8.4
-- Deployment Taget: 7.0
+OS X 10.10.4, Xcode 6.4, iOS SDK 8.4
 
 ###Build
 ```bash
