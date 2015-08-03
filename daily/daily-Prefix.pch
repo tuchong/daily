@@ -12,6 +12,7 @@
     #import "AFNetworking.h"
     #import "Masonry.h"
     #import "MJExtension.h"
+    #import "WeiboSDK.h"
     #import <SDWebImage/UIImageView+WebCache.h>
 #endif
 
@@ -29,6 +30,7 @@
 #define ScreenWidth ([UIScreen mainScreen].bounds.size.width)
 
 #pragma mark ---- Tuchong daily api token
-#define MXTuchongDailyApiUrl @""
-#define MXTuchongDailyToken @""
-#define MXWeChatAppId @""
+#define MXTuchongDailyApiUrl @"tuchong api url"
+#define MXTuchongDailyToken @"your tuchong api token"
+#define MXWeChatAppId @"your wechat app id"
+#define MXWeiboAppKey @"your weibo app key"

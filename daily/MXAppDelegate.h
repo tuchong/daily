@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "WXApi.h"
+#import "WeiboSDK.h"
 
-@interface MXAppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate>
+@interface MXAppDelegate : UIResponder <UIApplicationDelegate,WXApiDelegate,WeiboSDKDelegate>
 @property (strong,nonatomic) UIWindow *window;
 @end

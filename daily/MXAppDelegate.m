@@ -27,7 +27,29 @@
     //WeChat
     [WXApi registerApp:MXWeChatAppId withDescription:nil];
     
+    //Weixin
+    [WeiboSDK registerApp:MXWeiboAppKey];
+    
     return YES;
+}
+
+- (void)didReceiveWeiboRequest:(WBBaseRequest *)request
+{
+    
+}
+
+- (void)didReceiveWeiboResponse:(WBBaseResponse *)response
+{
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [WeiboSDK handleOpenURL:url delegate:self];
+}
+
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url
+{
+    return [WeiboSDK handleOpenURL:url delegate:self ];
 }
 
 @end

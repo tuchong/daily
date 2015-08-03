@@ -10,7 +10,8 @@
 #import "MXPostModel.h"
 #import "MXImageModel.h"
 #import "WXApi.h"
-#import "MXWechat.h"
+#import "WeiboSDK.h"
+#import "MXShareModel.h"
 
 @interface MXShareView ()
 @property (nonatomic, strong) UIView *darkView;
@@ -110,22 +111,31 @@
 }
 
 - (void)tapShareBtn:(UIButton *)btn{
+    MXShareModel *mxshare = [[MXShareModel alloc] init];
+    
+    mxshare.title = [NSString stringWithFormat:@"%@ @%@", self.collection.post.title, self.collection.post.author];
+    mxshare.url = self.collection.post.url;
+    mxshare.excerpt = self.collection.post.excerpt;
+    
     if(btn.tag < 3){
-        MXWechat *wechat = [[MXWechat alloc] init];
-        
-        wechat.title = [NSString stringWithFormat:@"%@ @%@", self.collection.post.title, self.collection.post.author];
-        wechat.url = self.collection.post.url;
-        wechat.excerpt = self.collection.post.excerpt;
-        wechat.scene = btn.tag;
+        mxshare.scene = btn.tag;
         
         if( self.collection.images.count ){
             MXImageModel *imageModel = self.collection.images[0];
             NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@.jpg", imageModel.uriSmall]];
             UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url]];
-            wechat.image = image;
+            mxshare.image = image;
         }
         
-        [self sendLinkContent:wechat];
+        [self shareToWechat:mxshare];
+    }else{
+        if( self.collection.images.count ){
+            MXImageModel *imageModel = self.collection.images[0];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@.jpg", imageModel.uriSmall]];
+            mxshare.imageData = [NSData dataWithContentsOfURL:url];
+        }
+        
+        [self shareToWeibo:mxshare];
     }
     
     [self removeView];
@@ -158,24 +168,45 @@
 }
 
 #pragma mark - Wechat api
-- (void)sendLinkContent:(MXWechat *)mxwechat
+- (void)shareToWechat:(MXShareModel *)mxshare
 {
     WXMediaMessage *message = [WXMediaMessage message];
-    message.title = mxwechat.title;
-    message.description = mxwechat.excerpt;
-    [message setThumbImage:mxwechat.image];
+    message.title = mxshare.title;
+    message.description = mxshare.excerpt;
+    [message setThumbImage:mxshare.image];
     
     WXWebpageObject *ext = [WXWebpageObject object];
-    ext.webpageUrl = mxwechat.url;
+    ext.webpageUrl = mxshare.url;
     
     message.mediaObject = ext;
     
     SendMessageToWXReq *req = [[SendMessageToWXReq alloc] init];
     req.bText = NO;
     req.message = message;
-    req.scene = (int)mxwechat.scene;
+    req.scene = (int)mxshare.scene;
     
     [WXApi sendReq:req];
+}
+
+#pragma mark - Weibo api
+- (void)shareToWeibo:(MXShareModel *)mxshare
+{
+    WBAuthorizeRequest *authRequest = [WBAuthorizeRequest request];
+    authRequest.scope = @"all";
+    
+    WBMessageObject *message = [WBMessageObject message];
+    WBWebpageObject *webpage = [WBWebpageObject object];
+    webpage.objectID = @"mxweibo";
+    webpage.title = mxshare.title;
+    webpage.description = mxshare.excerpt;
+    webpage.thumbnailData = mxshare.imageData;
+    webpage.webpageUrl = mxshare.url;
+    
+    message.text = mxshare.title;
+    message.mediaObject = webpage;
+    
+    WBSendMessageToWeiboRequest *request = [WBSendMessageToWeiboRequest requestWithMessage:message authInfo:authRequest access_token:nil];
+    [WeiboSDK sendRequest:request];
 }
 
 @end
