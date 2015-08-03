@@ -69,11 +69,16 @@
         int index = [[self.positions objectAtIndex:self.index] intValue];
         
         MXCollectionModel *collection = [self.collections objectAtIndex:self.index];
+        
+        MXPostView *tmpView = (MXPostView *)[cell.contentView viewWithTag:911];
+        [tmpView removeFromSuperview];
+        tmpView = nil;
+        
         MXPostView *postView = [[MXPostView alloc] initWithFrame:CGRectMake(0,0,ScreenWidth,ScreenHeight)
                                                            stuff:collection
                                                lastScrollToIndex:index
                                                         delegate:self];
-        
+        [postView setTag:911];
         [cell.contentView addSubview:postView];
     }
     

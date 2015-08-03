@@ -82,7 +82,6 @@
         
         MXShareView *shareView = [MXShareView initWithFrame:CGRectMake(0,0,ScreenWidth,ScreenHeight) andCollection:self.collection];
         [shareView show];
-        
     }
 }
 
