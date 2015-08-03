@@ -6,3 +6,9 @@
   Copyright (c) 2015年 misery.io. All rights reserved.
 */
 "title" = "图虫日报";
+"sharetitle" = "与朋友分享好图";
+"WeChat" = "微信好友";
+"WeChat Monments" = "微信朋友圈";
+"WeChat Favorites" = "微信收藏夹";
+"Weibo" = "新浪微博";
+"Cancel" = "取消";
