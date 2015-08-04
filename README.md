@@ -5,7 +5,7 @@
 OS X 10.10.4, Xcode 6.4, iOS SDK 8.4
 
 ####Config
-1. Edit apiUrl, tokenKey and wechatAppId at `daily-Prefix.pch`
+1. Edit `apiUrl`, `tokenKey`, `weiboAppKey` and `wechatAppId` at `daily-Prefix.pch`
 2. Adding custom URL schema of Weibo and Wechat
 
 ####Build
