@@ -118,9 +118,9 @@
             make.edges.equalTo(self.contentView);
         }];
         
-        UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
-        doubleTapGesture.numberOfTapsRequired = 2;
-        [self addGestureRecognizer:doubleTapGesture];
+        UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        singleTapGesture.numberOfTapsRequired = 1;
+        [self addGestureRecognizer:singleTapGesture];
     }
     
     return self;
