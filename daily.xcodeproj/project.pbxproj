@@ -34,7 +34,6 @@
 		44AB9E001B6B5284007139E3 /* MXPostViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 44AB9DFB1B6B5284007139E3 /* MXPostViewCell.m */; };
 		44AB9E041B6B528C007139E3 /* icon-30.png in Resources */ = {isa = PBXBuildFile; fileRef = 44AB9E021B6B528C007139E3 /* icon-30.png */; };
 		44AB9E051B6B528C007139E3 /* icon-30@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44AB9E031B6B528C007139E3 /* icon-30@2x.png */; };
-		44AB9E071B6B6058007139E3 /* screen.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 44AB9E061B6B6058007139E3 /* screen.jpg */; };
 		44DD360A1B6B4E990018B00B /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 44DD360C1B6B4E990018B00B /* InfoPlist.strings */; };
 		44DF18941B6C8ECD00BC87BE /* WeChat_Favorite@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44DF188C1B6C8ECD00BC87BE /* WeChat_Favorite@2x.png */; };
 		44DF18951B6C8ECD00BC87BE /* WeChat_Favorite@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 44DF188D1B6C8ECD00BC87BE /* WeChat_Favorite@3x.png */; };
@@ -95,7 +94,6 @@
 		44AB9DFB1B6B5284007139E3 /* MXPostViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXPostViewCell.m; sourceTree = "<group>"; };
 		44AB9E021B6B528C007139E3 /* icon-30.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-30.png"; sourceTree = "<group>"; };
 		44AB9E031B6B528C007139E3 /* icon-30@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-30@2x.png"; sourceTree = "<group>"; };
-		44AB9E061B6B6058007139E3 /* screen.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = screen.jpg; sourceTree = "<group>"; };
 		44DD360D1B6B4ECC0018B00B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		44DF188C1B6C8ECD00BC87BE /* WeChat_Favorite@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WeChat_Favorite@2x.png"; sourceTree = "<group>"; };
 		44DF188D1B6C8ECD00BC87BE /* WeChat_Favorite@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "WeChat_Favorite@3x.png"; sourceTree = "<group>"; };
@@ -240,7 +238,6 @@
 				44DF18911B6C8ECD00BC87BE /* WeChat@3x.png */,
 				44DF18921B6C8ECD00BC87BE /* Weibo@2x.png */,
 				44DF18931B6C8ECD00BC87BE /* Weibo@3x.png */,
-				44AB9E061B6B6058007139E3 /* screen.jpg */,
 				44AB9E021B6B528C007139E3 /* icon-30.png */,
 				44AB9E031B6B528C007139E3 /* icon-30@2x.png */,
 			);
@@ -352,7 +349,6 @@
 				44DD360A1B6B4E990018B00B /* InfoPlist.strings in Resources */,
 				44DF18971B6C8ECD00BC87BE /* WeChat_Moment@3x.png in Resources */,
 				44DF18981B6C8ECD00BC87BE /* WeChat@2x.png in Resources */,
-				44AB9E071B6B6058007139E3 /* screen.jpg in Resources */,
 				44DF18941B6C8ECD00BC87BE /* WeChat_Favorite@2x.png in Resources */,
 				44AB9DD71B6B4F4E007139E3 /* Localizable.strings in Resources */,
 				44DF189B1B6C8ECD00BC87BE /* Weibo@3x.png in Resources */,

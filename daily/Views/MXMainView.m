@@ -22,7 +22,7 @@
     return self;
 }
 
--(void)stuff:(NSMutableArray *)collections{
+-(void)stuff:(NSArray *)collections{
     self.collections = collections;
     
     for(int i=0; i<self.collections.count; i++){

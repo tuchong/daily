@@ -13,7 +13,6 @@
 #import "MXCollectionModel.h"
 
 @interface MXRootViewController ()
-@property (retain,nonatomic,readwrite) UIImageView *screenView;
 @property (retain,nonatomic,readwrite) MXMainView *mainView;
 @end
 
@@ -23,9 +22,9 @@
     [super viewDidLoad];
     
     [self setupMainView];
-    [self setupScreenView];
     [self setupHeaderView];
-    [self pullData];
+    [self pullFromCache];
+    [self pullFromUrl];
 }
 
 - (void)setupMainView {
@@ -76,56 +75,55 @@
     }];
 }
 
-- (void)setupScreenView {
-    self.screenView = [UIImageView new];
-    self.screenView.layer.masksToBounds = YES;
-    self.screenView.contentMode = UIViewContentModeScaleAspectFill;
-    self.screenView.alpha = 0.5;
-    [self.view addSubview:self.screenView];
+- (void)pullFromCache {
+    NSArray *cache = [self getCache];
     
-    [self.screenView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.size.equalTo(self.view);
-        make.edges.equalTo(self.view);
-    }];
-    
-    self.screenView.image = IMG(@"screen.jpg");
+    if (cache!=nil) {
+        NSArray *collections = [MXCollectionModel objectArrayWithKeyValuesArray:cache];
+        [self.mainView stuff:collections];
+    }
 }
 
-- (void)boarding {
-    [UIView beginAnimations:nil context:nil];
-    [UIView setAnimationDuration:6];
-    self.screenView.transform = CGAffineTransformMakeScale(1.8,1.8);
-    self.screenView.alpha = 1;
-    [UIView commitAnimations];
-    
+- (void)pullFromUrl {
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-}
-
-- (void)pullData {
-    [self boarding];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager.requestSerializer setValue:MXTuchongDailyToken forHTTPHeaderField:@"tuchong-daily-token"];
+    [manager.requestSerializer setValue:MXTuchongDailyToken forHTTPHeaderField:MXTuchongDailyTokenKey];
     [manager.requestSerializer setCachePolicy:NSURLRequestUseProtocolCachePolicy];
     [manager GET:MXTuchongDailyApiUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
         
-        NSMutableArray *collections = [MXCollectionModel objectArrayWithKeyValuesArray:[responseObject objectForKey:@"collections"]];
+        NSArray *responseArray = [responseObject objectForKey:@"collections"];
+        NSArray *cache = [self getCache];
         
-        [self.mainView stuff:collections];
-        [self.screenView.layer removeAllAnimations];
-        
-        [UIView animateWithDuration:1.5f animations:^{
-            self.screenView.alpha = 0;
-        } completion:^(BOOL finished) {
-            [self.screenView removeFromSuperview];
-            self.screenView = nil;
-        }];
+        if(cache==nil || ![responseArray isEqualToArray:cache]){
+            NSArray *collections = [MXCollectionModel objectArrayWithKeyValuesArray:responseArray];
+            [self setCache:responseArray];
+            [self.mainView stuff:collections];
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"%@", error);
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        NSLog(@"%@", error);
     }];
+}
 
+- (NSArray *)getCache {
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    NSData *data = (NSData *)[prefs dataForKey:MXTuchongDailyCacheKey];
+    NSArray *array;
+    
+    if(data!=nil){
+        array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    }
+    
+    return array;
+}
+
+- (void)setCache:(NSArray *)array {
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:array];
+    
+    NSUserDefaults *prefs = [NSUserDefaults standardUserDefaults];
+    [prefs setObject:data forKey:MXTuchongDailyCacheKey];
 }
 
 - (void)didReceiveMemoryWarning {

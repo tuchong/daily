@@ -30,6 +30,8 @@
 #define ScreenWidth ([UIScreen mainScreen].bounds.size.width)
 
 #pragma mark ---- Tuchong daily api token
+#define MXTuchongDailyTokenKey @"tuchong-daily-token"
+#define MXTuchongDailyCacheKey @"tuchongDailyCache"
 #define MXTuchongDailyApiUrl @"tuchong api url"
 #define MXTuchongDailyToken @"your tuchong api token"
 #define MXWeChatAppId @"your wechat app id"
