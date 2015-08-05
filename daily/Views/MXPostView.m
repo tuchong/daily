@@ -39,6 +39,7 @@
     view.pagingEnabled = YES;
     view.contentOffset = CGPointMake(0,self.index*ScreenHeight);
     view.bounces = YES;
+    view.scrollsToTop = YES;
     view.showsVerticalScrollIndicator = NO;
     view.backgroundColor = RGBA(0x4444444,1);
     [view registerClass:[MXPostViewCell class] forCellWithReuseIdentifier:@"postcell"];
