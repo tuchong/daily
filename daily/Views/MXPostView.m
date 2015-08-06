@@ -8,7 +8,6 @@
 
 #import "MXPostView.h"
 #import "MXPostViewCell.h"
-#import "MXShareView.h"
 
 @implementation MXPostView
 
@@ -45,11 +44,6 @@
     [view registerClass:[MXPostViewCell class] forCellWithReuseIdentifier:@"postcell"];
     
     [self addSubview:view];
-    
-    UILongPressGestureRecognizer *longTapGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    longTapGesture.minimumPressDuration = .5;
-    longTapGesture.delegate = self;
-    [self addGestureRecognizer:longTapGesture];
 }
 
 #pragma mark - UICollectionViewDataSource Delegate
@@ -74,16 +68,6 @@
     }
     
     return cell;
-}
-
-#pragma mark -- Long press
-- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
-        
-        MXShareView *shareView = [MXShareView initWithFrame:CGRectMake(0,0,ScreenWidth,ScreenHeight) andCollection:self.collection];
-        [shareView show];
-    }
 }
 
 @end

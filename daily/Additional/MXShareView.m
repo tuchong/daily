@@ -11,27 +11,26 @@
 #import "MXImageModel.h"
 #import "WXApi.h"
 #import "WeiboSDK.h"
-#import "MXShareModel.h"
 
 @interface MXShareView ()
 @property (nonatomic, strong) UIView *darkView;
 @property (nonatomic, strong) UIView *controlView;
-@property (nonatomic, strong) MXCollectionModel *collection;
+@property (nonatomic, strong) MXShareModel *mxshare;
 @end
 
 @class MXWechat;
 
 @implementation MXShareView
 
-+ (instancetype)initWithFrame:(CGRect)frame andCollection:(MXCollectionModel *)model{
-    return [[self alloc] initWithFrame:(CGRect)frame andCollection:(MXCollectionModel *)model];
++ (instancetype)initWithFrame:(CGRect)frame andModel:(MXShareModel *)model{
+    return [[self alloc] initWithFrame:(CGRect)frame andModel:(MXShareModel *)model];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame andCollection:(MXCollectionModel *)model{
+- (instancetype)initWithFrame:(CGRect)frame andModel:(MXShareModel *)model{
     self = [super initWithFrame:frame];
     
     if (self) {
-        self.collection = model;
+        self.mxshare = model;
         
         self.darkView = [[UIView alloc] initWithFrame:frame];
         self.darkView.backgroundColor = [UIColor blackColor];
@@ -111,31 +110,11 @@
 }
 
 - (void)tapShareBtn:(UIButton *)btn{
-    MXShareModel *mxshare = [[MXShareModel alloc] init];
-    
-    mxshare.title = [NSString stringWithFormat:@"%@ @%@", self.collection.post.title, self.collection.post.author];
-    mxshare.url = self.collection.post.url;
-    mxshare.excerpt = self.collection.post.excerpt;
-    
     if(btn.tag < 3){
-        mxshare.scene = btn.tag;
-        
-        if( self.collection.images.count ){
-            MXImageModel *imageModel = self.collection.images[0];
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@.jpg", imageModel.uriSmall]];
-            UIImage *image = [[UIImage alloc] initWithData:[NSData dataWithContentsOfURL:url]];
-            mxshare.image = image;
-        }
-        
-        [self shareToWechat:mxshare];
+        self.mxshare.scene = btn.tag;
+        [self shareToWechat:self.mxshare];
     }else{
-        if( self.collection.images.count ){
-            MXImageModel *imageModel = self.collection.images[0];
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@.jpg", imageModel.uriSmall]];
-            mxshare.imageData = [NSData dataWithContentsOfURL:url];
-        }
-        
-        [self shareToWeibo:mxshare];
+        [self shareToWeibo:self.mxshare];
     }
     
     [self removeView];

@@ -15,7 +15,7 @@
 - (void)postView:(MXPostView *)postView didScrollToIndex:(int)index;
 @end
 
-@interface MXPostView : UIView<UICollectionViewDataSource,UICollectionViewDelegate,UIGestureRecognizerDelegate>
+@interface MXPostView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic, weak) id<MXPostViewDelegate> delegate;
 - (instancetype)initWithFrame:(CGRect)frame stuff:(MXCollectionModel *)model lastScrollToIndex:(int)index delegate:(id<MXPostViewDelegate>)delegate;
 @property (retain,nonatomic,readwrite) MXCollectionModel *collection;

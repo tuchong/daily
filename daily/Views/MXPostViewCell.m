@@ -11,6 +11,8 @@
 #import "MXPostModel.h"
 #import "MXImageModel.h"
 #import "VIPhotoView.h"
+#import "MXShareView.h"
+#import "MXShareModel.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @implementation MXPostViewCell
@@ -121,6 +123,11 @@
         UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
         singleTapGesture.numberOfTapsRequired = 1;
         [self addGestureRecognizer:singleTapGesture];
+        
+        UILongPressGestureRecognizer *longTapGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+        longTapGesture.minimumPressDuration = .5;
+        longTapGesture.delegate = self;
+        [self addGestureRecognizer:longTapGesture];
     }
     
     return self;
@@ -144,9 +151,37 @@
     self.titleView.text = collection.post.title;
     self.nameView.text = collection.post.author;
     self.caremaView.text = imageModel.camera;
+    self.collection = collection;
 }
 
-#pragma mark -- Double tap
+#pragma mark -- Long press
+- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            UIGraphicsBeginImageContext(CGSizeMake(100, 100));
+            [self.imageView.image drawInRect:CGRectMake(0,0,100,100)];
+            UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+            UIGraphicsEndImageContext();
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                MXShareModel *mxshare = [[MXShareModel alloc] init];
+                mxshare.title = [NSString stringWithFormat:@"%@ @%@", self.collection.post.title, self.collection.post.author];
+                mxshare.url = self.collection.post.url;
+                mxshare.excerpt = self.collection.post.excerpt;
+                mxshare.image = newImage;
+                mxshare.imageData = UIImagePNGRepresentation(newImage);
+                
+                MXShareView *shareView = [MXShareView initWithFrame:CGRectMake(0,0,ScreenWidth,ScreenHeight) andModel:mxshare];
+                [shareView show];
+            });
+        });
+    }
+}
+
+#pragma mark -- single tap
 - (void)handleTapGesture:(UITapGestureRecognizer *)sender {
     [VIPhotoView initWithFrame:self.bounds andImage:self.imageView.image];
 }

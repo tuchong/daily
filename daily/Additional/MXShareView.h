@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "MXCollectionModel.h"
+#import "MXShareModel.h"
 
 @interface MXShareView : UIView
-+ (instancetype)initWithFrame:(CGRect)frame andCollection:(MXCollectionModel *)model;
-- (instancetype)initWithFrame:(CGRect)frame andCollection:(MXCollectionModel *)model;
++ (instancetype)initWithFrame:(CGRect)frame andModel:(MXShareModel *)model;
+- (instancetype)initWithFrame:(CGRect)frame andModel:(MXShareModel *)model;
 - (void)show;
 @end
