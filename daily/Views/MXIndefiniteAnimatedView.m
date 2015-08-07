@@ -49,7 +49,7 @@
 
 - (void)drawRect:(CGRect)rect
 {
-    CGFloat lineWidth = 1.f;
+    CGFloat lineWidth = .5f;
     UIColor *lineColor = [UIColor whiteColor];
     if (self.lineWidth) {
         lineWidth = self.lineWidth;

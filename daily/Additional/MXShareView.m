@@ -41,7 +41,7 @@
         [self.darkView addGestureRecognizer:tapGesture];
         
         self.controlView = [[UIView alloc] initWithFrame:CGRectMake(0,frame.size.height,frame.size.width,220)];
-        self.controlView.backgroundColor = RGBA(0xf0f0f0,1);
+        self.controlView.backgroundColor = RGBA(0xf0f0f0,.9);
         [self addSubview:self.controlView];
         
         UILabel *titleView = [[UILabel alloc] init];
@@ -78,7 +78,7 @@
         }
         
         UIButton *cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(20,160,frame.size.width-40,40)];
-        [cancelBtn setBackgroundColor:[UIColor whiteColor]];
+        [cancelBtn setBackgroundColor:RGBA(0xffffff,.85)];
         [cancelBtn setTitle:NSLocalizedString(@"Cancel", nil) forState:UIControlStateNormal];
         [[cancelBtn titleLabel] setFont:[UIFont systemFontOfSize:14.0f]];
         [cancelBtn setTitleColor:RGBA(0x777777,1) forState:UIControlStateNormal];
