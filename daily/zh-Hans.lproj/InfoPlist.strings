@@ -1,0 +1,8 @@
+/* 
+  InfoPlist.strings
+  daily
+
+  Created by mufeng on 15/7/31.
+  Copyright (c) 2015年 misery.io. All rights reserved.
+*/
+CFBundleDisplayName = "图虫日报";
