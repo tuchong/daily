@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>DAC293E9-434A-43D0-8956-350F842C0E38</string>
+	<key>IDESourceControlProjectName</key>
+	<string>daily</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9BC0C46855CB46CA7D08DF2BA76E9A2C47B6D64E</key>
+		<string>https://github.com/iMuFeng/daily.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>daily.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9BC0C46855CB46CA7D08DF2BA76E9A2C47B6D64E</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/iMuFeng/daily.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9BC0C46855CB46CA7D08DF2BA76E9A2C47B6D64E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9BC0C46855CB46CA7D08DF2BA76E9A2C47B6D64E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>daily</string>
+		</dict>
+	</array>
+</dict>
+</plist>
