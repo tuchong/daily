@@ -52,7 +52,7 @@
         titleView.frame = CGRectMake(0,0,frame.size.width,50.f);
         [self.controlView addSubview:titleView];
         
-        NSArray *btnArray = @[@{@"icon": @"WeChat", @"title": NSLocalizedString(@"WeChat", nil)},@{@"icon": @"WeChat_Moment", @"title": NSLocalizedString(@"WeChat Monments", nil)},@{@"icon": @"WeChat_Favorite", @"title": NSLocalizedString(@"WeChat Favorites", nil)},@{@"icon": @"Weibo", @"title": NSLocalizedString(@"Weibo", nil)}];
+        NSArray *btnArray = @[@{@"icon": @"WeChat", @"title": NSLocalizedString(@"WeChat", nil)},@{@"icon": @"WeChat_Moment", @"title": NSLocalizedString(@"Monments", nil)},@{@"icon": @"WeChat_Favorite", @"title": NSLocalizedString(@"Favorites", nil)},@{@"icon": @"Weibo", @"title": NSLocalizedString(@"Weibo", nil)}];
         
         float spaceWidth = (frame.size.width-20*2-57*4)/3;
         int index = 0;

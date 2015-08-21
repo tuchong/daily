@@ -11,7 +11,7 @@
 
 @implementation MXPostView
 
--(instancetype)initWithFrame:(CGRect)frame stuff:(MXCollectionModel *)model lastScrollToIndex:(int)index delegate:(id<MXPostViewDelegate>)delegate{
+-(instancetype)initWithFrame:(CGRect)frame stuff:(MXCollectionModel *)model lastScrollToIndex:(NSInteger)index delegate:(id<MXPostViewDelegate>)delegate{
     self = [super initWithFrame:frame];
     
     if(self){
@@ -64,7 +64,7 @@
     [cell setWithCollection:self.collection forIndexPath:indexPath];
     
     if ([self.delegate respondsToSelector:@selector(postView:didScrollToIndex:)]) {
-        [self.delegate postView:self didScrollToIndex:(int)indexPath.row];
+        [self.delegate postView:self didScrollToIndex:indexPath.row];
     }
     
     return cell;
