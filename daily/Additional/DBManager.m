@@ -101,7 +101,7 @@
     NSMutableArray *collections = [[NSMutableArray alloc] init];
     
     if( [self.db open] ){
-        NSString *sql = [NSString stringWithFormat:@"select content from posts order by id desc limit %d,%ld", (page-1)*number, (long)number];
+        NSString *sql = [NSString stringWithFormat:@"select content from posts order by id desc limit %ld,%ld", (page-1)*number, (long)number];
         FMResultSet *rs = [self.db executeQuery:sql];
         
         while ([rs next]) {

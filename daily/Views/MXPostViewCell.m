@@ -137,7 +137,7 @@
 -(void)setWithCollection:(MXCollectionModel *)collection forIndexPath:(NSIndexPath *)indexPath{
     MXImageModel *imageModel = [collection.images objectAtIndex:indexPath.row];
     
-    self.pagedView.text = [NSString stringWithFormat:@"%d/%d", indexPath.row+1, collection.post.count];
+    self.pagedView.text = [NSString stringWithFormat:@"%ld/%d", indexPath.row+1, collection.post.count];
     
     [self.loaderView show];
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.jpg", imageModel.uri]]

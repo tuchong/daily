@@ -28,10 +28,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self setupNotification];
     [self setupInitialData];
     [self pullCache];
     [self setupView];
     [self syncRemote];
+}
+
+- (void)setupNotification {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncRemote) name:@"EnterForegroundNotification" object:nil];
 }
 
 - (void)setupView{
@@ -197,6 +202,11 @@
             [self.collectionView reloadData];
         }
     }
+}
+
+#pragma mark - NSNotificationCenter destroy
+-(void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
