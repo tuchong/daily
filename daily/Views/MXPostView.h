@@ -12,12 +12,12 @@
 @class MXPostView;
 @protocol MXPostViewDelegate <NSObject>
 @optional
-- (void)postView:(MXPostView *)postView didScrollToIndex:(int)index;
+- (void)postView:(MXPostView *)postView didScrollToIndex:(NSInteger)index;
 @end
 
 @interface MXPostView : UIView<UICollectionViewDataSource,UICollectionViewDelegate>
 @property (nonatomic, weak) id<MXPostViewDelegate> delegate;
-- (instancetype)initWithFrame:(CGRect)frame stuff:(MXCollectionModel *)model lastScrollToIndex:(int)index delegate:(id<MXPostViewDelegate>)delegate;
+- (instancetype)initWithFrame:(CGRect)frame stuff:(MXCollectionModel *)model lastScrollToIndex:(NSInteger)index delegate:(id<MXPostViewDelegate>)delegate;
 @property (retain,nonatomic,readwrite) MXCollectionModel *collection;
-@property int index;
+@property (assign,nonatomic,readwrite) NSInteger index;
 @end

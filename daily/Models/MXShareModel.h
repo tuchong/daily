@@ -14,5 +14,5 @@
 @property (strong, nonatomic) NSString *url;
 @property (strong, nonatomic) UIImage *image;
 @property (strong, nonatomic) NSData *imageData;
-@property NSInteger scene;
+@property (assign, nonatomic) NSInteger scene;
 @end
