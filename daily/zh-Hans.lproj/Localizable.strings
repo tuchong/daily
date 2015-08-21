@@ -1,0 +1,14 @@
+/* 
+  Localizable.strings
+  daily
+
+  Created by mufeng on 15/7/31.
+  Copyright (c) 2015年 misery.io. All rights reserved.
+*/
+"title" = "图虫日报";
+"sharetitle" = "与朋友分享好图";
+"WeChat" = "微信好友";
+"Monments" = "微信朋友圈";
+"Favorites" = "微信收藏夹";
+"Weibo" = "新浪微博";
+"Cancel" = "取消";
