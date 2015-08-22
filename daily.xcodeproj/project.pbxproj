@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		440B571E1B881BAC00F508F0 /* MXRefreshAnimationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 440B571D1B881BAC00F508F0 /* MXRefreshAnimationView.m */; };
 		443910061B671F830062C13E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 443910051B671F830062C13E /* main.m */; };
 		443910111B671F830062C13E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 443910101B671F830062C13E /* Images.xcassets */; };
 		4439102C1B67232E0062C13E /* MXAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4439102B1B67232E0062C13E /* MXAppDelegate.m */; };
@@ -50,6 +51,8 @@
 
 /* Begin PBXFileReference section */
 		21969C924540C2853420E3B3 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		440B571C1B881BAC00F508F0 /* MXRefreshAnimationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXRefreshAnimationView.h; sourceTree = "<group>"; };
+		440B571D1B881BAC00F508F0 /* MXRefreshAnimationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXRefreshAnimationView.m; sourceTree = "<group>"; };
 		443910001B671F830062C13E /* daily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = daily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		443910041B671F830062C13E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		443910051B671F830062C13E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -219,6 +222,8 @@
 				44AB9DF51B6B5284007139E3 /* MXLoaderView.m */,
 				44DF189C1B6C8EFD00BC87BE /* MXShareView.h */,
 				44DF189D1B6C8EFD00BC87BE /* MXShareView.m */,
+				440B571C1B881BAC00F508F0 /* MXRefreshAnimationView.h */,
+				440B571D1B881BAC00F508F0 /* MXRefreshAnimationView.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -314,6 +319,11 @@
 				TargetAttributes = {
 					44390FFF1B671F830062C13E = {
 						CreatedOnToolsVersion = 6.4;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};
@@ -409,6 +419,7 @@
 				44AB9E001B6B5284007139E3 /* MXPostViewCell.m in Sources */,
 				44AB9DEF1B6B527C007139E3 /* MXImageModel.m in Sources */,
 				44AB9DE61B6B5275007139E3 /* MXRootViewController.m in Sources */,
+				440B571E1B881BAC00F508F0 /* MXRefreshAnimationView.m in Sources */,
 				44DF189E1B6C8EFD00BC87BE /* MXShareView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

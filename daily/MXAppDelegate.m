@@ -33,10 +33,6 @@
     return YES;
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"EnterForegroundNotification" object:self userInfo:nil];
-}
-
 - (void)didReceiveWeiboRequest:(WBBaseRequest *)request
 {
 }
