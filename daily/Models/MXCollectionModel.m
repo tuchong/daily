@@ -13,7 +13,7 @@
 + (NSDictionary *)objectClassInArray
 {
     return @{
-             @"images" : @"MXImageModel"
+             @"images": @"MXImageModel"
              };
 }
 

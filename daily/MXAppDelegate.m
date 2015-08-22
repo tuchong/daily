@@ -35,7 +35,6 @@
 
 - (void)didReceiveWeiboRequest:(WBBaseRequest *)request
 {
-    
 }
 
 - (void)didReceiveWeiboResponse:(WBBaseResponse *)response

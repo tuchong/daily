@@ -120,8 +120,9 @@
             make.edges.equalTo(self.contentView);
         }];
         
-        UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+        UITapGestureRecognizer *singleTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleSingleTap:)];
         singleTapGesture.numberOfTapsRequired = 1;
+        singleTapGesture.numberOfTouchesRequired = 1;
         [self addGestureRecognizer:singleTapGesture];
         
         UILongPressGestureRecognizer *longTapGesture = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
@@ -136,7 +137,7 @@
 -(void)setWithCollection:(MXCollectionModel *)collection forIndexPath:(NSIndexPath *)indexPath{
     MXImageModel *imageModel = [collection.images objectAtIndex:indexPath.row];
     
-    self.pagedView.text = [NSString stringWithFormat:@"%d/%d", (int)indexPath.row+1, collection.post.count];
+    self.pagedView.text = [NSString stringWithFormat:@"%ld/%d", indexPath.row+1, collection.post.count];
     
     [self.loaderView show];
     [self.imageView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@.jpg", imageModel.uri]]
@@ -149,7 +150,7 @@
     [self.avatarView sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", collection.post.avatar]]];
     
     self.titleView.text = collection.post.title;
-    self.nameView.text = collection.post.author;
+    self.nameView.text = collection.post.authorName;
     self.caremaView.text = imageModel.camera;
     self.collection = collection;
 }
@@ -168,7 +169,7 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 MXShareModel *mxshare = [[MXShareModel alloc] init];
-                mxshare.title = [NSString stringWithFormat:@"%@ @%@", self.collection.post.title, self.collection.post.author];
+                mxshare.title = [NSString stringWithFormat:@"%@ @%@", self.collection.post.title, self.collection.post.authorName];
                 mxshare.url = self.collection.post.url;
                 mxshare.excerpt = self.collection.post.excerpt;
                 mxshare.image = newImage;
@@ -182,7 +183,7 @@
 }
 
 #pragma mark -- single tap
-- (void)handleTapGesture:(UITapGestureRecognizer *)sender {
+- (void)handleSingleTap:(UITapGestureRecognizer *)sender {
     [VIPhotoView initWithFrame:self.bounds andImage:self.imageView.image];
 }
 

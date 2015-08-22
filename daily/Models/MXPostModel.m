@@ -11,9 +11,10 @@
 @implementation MXPostModel
 + (NSDictionary *)replacedKeyFromPropertyName
 {
-    return @{@"author" : @"author.name",
-             @"avatar" : @"author.icon",
-             @"count" : @"image_count"
+    return @{@"authorName": @"author.name",
+             @"authorUrl": @"author.url",
+             @"avatar": @"author.icon",
+             @"count": @"image_count"
              };
 }
 @end
