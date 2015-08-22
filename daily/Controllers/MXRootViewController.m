@@ -12,15 +12,18 @@
 #import "Masonry.h"
 #import "MXPostView.h"
 #import "MXCollectionModel.h"
+#import "MXRefreshAnimationView.h"
 
 @interface MXRootViewController ()<MXPostViewDelegate,UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate>
 @property (retain,nonatomic,readwrite) UIView *headerView;
+@property (retain,nonatomic,readwrite) MXRefreshAnimationView *loaderView;
 @property (retain,nonatomic,readwrite) NSMutableArray *positions;
 @property (retain,nonatomic,readwrite) UICollectionView *collectionView;
 @property (retain,nonatomic,readwrite) NSMutableArray *collections;
 @property (assign,nonatomic,readwrite) NSInteger index;
 @property (assign,nonatomic,readwrite) NSInteger page;
 @property (assign,nonatomic,readwrite) NSInteger maxPage;
+@property (assign,nonatomic,readwrite) BOOL syning;
 @end
 
 @implementation MXRootViewController
@@ -28,20 +31,21 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setupNotification];
     [self setupInitialData];
     [self pullCache];
     [self setupView];
-    [self syncRemote];
-}
-
-- (void)setupNotification {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(syncRemote) name:@"EnterForegroundNotification" object:nil];
+    [self syncRemote:^{}];
 }
 
 - (void)setupView{
+    [self setupLoaderView];
     [self setupMainView];
     [self setupHeaderView];
+}
+
+- (void)setupLoaderView{
+    self.loaderView = [[MXRefreshAnimationView alloc] initWithFrame:CGRectMake(0,(ScreenHeight-24)/2,24,24)];
+    [self.view addSubview:self.loaderView];
 }
 
 - (void)setupMainView {
@@ -65,6 +69,7 @@
 
 - (void)setupHeaderView {
     self.headerView = [UIView new];
+    self.headerView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.headerView];
     
     [self.headerView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -119,7 +124,12 @@
     self.collections = [MXCollectionModel objectArrayWithKeyValuesArray:cache];
 }
 
-- (void)syncRemote {
+- (void)syncRemote:(void (^)())block {
+    if(self.syning){
+        return;
+    }
+    
+    self.syning = TRUE;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
@@ -127,12 +137,18 @@
     [manager.requestSerializer setCachePolicy:NSURLRequestUseProtocolCachePolicy];
     [manager GET:MXTuchongDailyApiUrl parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        self.syning = FALSE;
         [[DBManager shareManager] insertArray:[responseObject objectForKey:@"collections"]];
         [self setupInitialData];
         [self pullCache];
         [self.collectionView reloadData];
+        
+        block();
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+        self.syning = FALSE;
+        block();
+        
         NSLog(@"%@", error);
     }];
 }
@@ -176,17 +192,18 @@
 }
 
 #pragma mark - ScrollView Delegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if(self.page < self.maxPage){
-        CGPoint offset = scrollView.contentOffset;
-        CGRect bounds = scrollView.bounds;
-        CGSize size = scrollView.contentSize;
-        UIEdgeInsets inset = scrollView.contentInset;
-        
-        float x = offset.x + bounds.size.width - inset.right;
-        float w = size.width;
-        
-        if(x > w - bounds.size.width) {
+- (void)scrollViewWillBeginDecelerating:(UIScrollView *)scrollView{
+    if(scrollView.contentOffset.x < -50){
+        [self.loaderView startRotateAnimation];
+        [self syncRemote:^{
+            [self.loaderView stopRotateAnimation];
+        }];
+    }
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (scrollView.contentOffset.x + scrollView.frame.size.width*2 >= scrollView.contentSize.width) {
+        if(self.page < self.maxPage){
             NSMutableArray *tmpPositions = [[NSMutableArray alloc] init];
             for(long i=0; i<10; i++){
                 [tmpPositions addObject:[NSNumber numberWithInt:0]];
@@ -201,6 +218,14 @@
             
             [self.collectionView reloadData];
         }
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if(scrollView.contentOffset.x<0 && !self.syning){
+        CGFloat rate = fabs(scrollView.contentOffset.x/50);
+        
+        [self.loaderView drawPath:rate];
     }
 }
 
