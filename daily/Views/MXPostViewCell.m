@@ -184,7 +184,9 @@
 
 #pragma mark -- single tap
 - (void)handleSingleTap:(UITapGestureRecognizer *)sender {
-    [VIPhotoView initWithFrame:self.bounds andImage:self.imageView.image];
+    if(self.imageView.image!=nil){
+        [VIPhotoView initWithFrame:self.bounds andImage:self.imageView.image];
+    }
 }
 
 @end
